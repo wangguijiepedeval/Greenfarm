@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzScoreLogMapper">
+    
+    <resultMap type="TzScoreLog" id="TzScoreLogResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="type"    column="type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="sn"    column="sn"    />
+        <result property="scoreType"    column="score_type"    />
+    </resultMap>
+
+    <sql id="selectTzScoreLogVo">
+        select id, user_id, type, create_time, sn, score_type from tz_score_log
+    </sql>
+
+    <select id="selectTzScoreLogList" parameterType="TzScoreLog" resultMap="TzScoreLogResult">
+        <include refid="selectTzScoreLogVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="sn != null  and sn != ''"> and sn = #{sn}</if>
+            <if test="scoreType != null "> and score_type = #{scoreType}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzScoreLogById" parameterType="Long" resultMap="TzScoreLogResult">
+        <include refid="selectTzScoreLogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTzScoreLog" parameterType="TzScoreLog" useGeneratedKeys="true" keyProperty="id">
+        insert into tz_score_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="type != null">type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="sn != null">sn,</if>
+            <if test="scoreType != null">score_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="type != null">#{type},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="sn != null">#{sn},</if>
+            <if test="scoreType != null">#{scoreType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzScoreLog" parameterType="TzScoreLog">
+        update tz_score_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="sn != null">sn = #{sn},</if>
+            <if test="scoreType != null">score_type = #{scoreType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTzScoreLogById" parameterType="Long">
+        delete from tz_score_log where id = #{id}
+    </delete>
+
+    <delete id="deleteTzScoreLogByIds" parameterType="String">
+        delete from tz_score_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

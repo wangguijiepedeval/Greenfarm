@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzBrandMapper">
+    
+    <resultMap type="TzBrand" id="TzBrandResult">
+        <result property="brandId"    column="brand_id"    />
+        <result property="brandName"    column="brand_name"    />
+        <result property="brandPic"    column="brand_pic"    />
+        <result property="userId"    column="user_id"    />
+        <result property="memo"    column="memo"    />
+        <result property="seq"    column="seq"    />
+        <result property="status"    column="status"    />
+        <result property="brief"    column="brief"    />
+        <result property="content"    column="content"    />
+        <result property="recTime"    column="rec_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="firstChar"    column="first_char"    />
+    </resultMap>
+
+    <sql id="selectTzBrandVo">
+        select brand_id, brand_name, brand_pic, user_id, memo, seq, status, brief, content, rec_time, update_time, first_char from tz_brand
+    </sql>
+
+    <select id="selectTzBrandList" parameterType="TzBrand" resultMap="TzBrandResult">
+        <include refid="selectTzBrandVo"/>
+        <where>  
+            <if test="brandName != null  and brandName != ''"> and brand_name like concat('%', #{brandName}, '%')</if>
+            <if test="brandPic != null  and brandPic != ''"> and brand_pic = #{brandPic}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="memo != null  and memo != ''"> and memo = #{memo}</if>
+            <if test="seq != null "> and seq = #{seq}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="brief != null  and brief != ''"> and brief = #{brief}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="recTime != null "> and rec_time = #{recTime}</if>
+            <if test="firstChar != null  and firstChar != ''"> and first_char = #{firstChar}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzBrandByBrandId" parameterType="Long" resultMap="TzBrandResult">
+        <include refid="selectTzBrandVo"/>
+        where brand_id = #{brandId}
+    </select>
+        
+    <insert id="insertTzBrand" parameterType="TzBrand" useGeneratedKeys="true" keyProperty="brandId">
+        insert into tz_brand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="brandName != null and brandName != ''">brand_name,</if>
+            <if test="brandPic != null">brand_pic,</if>
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="memo != null">memo,</if>
+            <if test="seq != null">seq,</if>
+            <if test="status != null">status,</if>
+            <if test="brief != null">brief,</if>
+            <if test="content != null">content,</if>
+            <if test="recTime != null">rec_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="firstChar != null">first_char,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="brandName != null and brandName != ''">#{brandName},</if>
+            <if test="brandPic != null">#{brandPic},</if>
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="memo != null">#{memo},</if>
+            <if test="seq != null">#{seq},</if>
+            <if test="status != null">#{status},</if>
+            <if test="brief != null">#{brief},</if>
+            <if test="content != null">#{content},</if>
+            <if test="recTime != null">#{recTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="firstChar != null">#{firstChar},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzBrand" parameterType="TzBrand">
+        update tz_brand
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="brandName != null and brandName != ''">brand_name = #{brandName},</if>
+            <if test="brandPic != null">brand_pic = #{brandPic},</if>
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="memo != null">memo = #{memo},</if>
+            <if test="seq != null">seq = #{seq},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="brief != null">brief = #{brief},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="recTime != null">rec_time = #{recTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="firstChar != null">first_char = #{firstChar},</if>
+        </trim>
+        where brand_id = #{brandId}
+    </update>
+
+    <delete id="deleteTzBrandByBrandId" parameterType="Long">
+        delete from tz_brand where brand_id = #{brandId}
+    </delete>
+
+    <delete id="deleteTzBrandByBrandIds" parameterType="String">
+        delete from tz_brand where brand_id in 
+        <foreach item="brandId" collection="array" open="(" separator="," close=")">
+            #{brandId}
+        </foreach>
+    </delete>
+</mapper>

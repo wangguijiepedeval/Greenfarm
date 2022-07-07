@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.farm.mapper.FarmRentRelationMapper">
+    
+    <resultMap type="FarmRentRelation" id="FarmRentRelationResult">
+        <result property="userid"    column="userId"    />
+        <result property="farmid"    column="farmId"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectFarmRentRelationVo">
+        select userId, farmId, update_time, create_time from farm_rent_relation
+    </sql>
+
+    <select id="selectFarmRentRelationList" parameterType="FarmRentRelation" resultMap="FarmRentRelationResult">
+        <include refid="selectFarmRentRelationVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectFarmRentRelationByUserid" parameterType="String" resultMap="FarmRentRelationResult">
+        <include refid="selectFarmRentRelationVo"/>
+        where userId = #{userid}
+    </select>
+        
+    <insert id="insertFarmRentRelation" parameterType="FarmRentRelation">
+        insert into farm_rent_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userid != null">userId,</if>
+            <if test="farmid != null">farmId,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userid != null">#{userid},</if>
+            <if test="farmid != null">#{farmid},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFarmRentRelation" parameterType="FarmRentRelation">
+        update farm_rent_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="farmid != null">farmId = #{farmid},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where userId = #{userid}
+    </update>
+
+    <delete id="deleteFarmRentRelationByUserid" parameterType="String">
+        delete from farm_rent_relation where userId = #{userid}
+    </delete>
+
+    <delete id="deleteFarmRentRelationByUserids" parameterType="String">
+        delete from farm_rent_relation where userId in 
+        <foreach item="userid" collection="array" open="(" separator="," close=")">
+            #{userid}
+        </foreach>
+    </delete>
+</mapper>

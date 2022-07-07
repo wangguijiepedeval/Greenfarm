@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.farm.mapper.CommentMapper">
+    
+    <resultMap type="Comment" id="CommentResult">
+        <result property="commentatorid"    column="commentatorId"    />
+        <result property="type"    column="type"    />
+        <result property="farmid"    column="farmId"    />
+        <result property="goodsid"    column="goodsId"    />
+        <result property="content"    column="content"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectCommentVo">
+        select commentatorId, type, farmId, goodsId, content, update_time, create_time from comment
+    </sql>
+
+    <select id="selectCommentList" parameterType="Comment" resultMap="CommentResult">
+        <include refid="selectCommentVo"/>
+        <where>  
+            <if test="type != null "> and type = #{type}</if>
+            <if test="farmid != null  and farmid != ''"> and farmId = #{farmid}</if>
+            <if test="goodsid != null  and goodsid != ''"> and goodsId = #{goodsid}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+        </where>
+    </select>
+    
+    <select id="selectCommentByCommentatorid" parameterType="String" resultMap="CommentResult">
+        <include refid="selectCommentVo"/>
+        where commentatorId = #{commentatorid}
+    </select>
+        
+    <insert id="insertComment" parameterType="Comment">
+        insert into comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="commentatorid != null">commentatorId,</if>
+            <if test="type != null">type,</if>
+            <if test="farmid != null">farmId,</if>
+            <if test="goodsid != null">goodsId,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="commentatorid != null">#{commentatorid},</if>
+            <if test="type != null">#{type},</if>
+            <if test="farmid != null">#{farmid},</if>
+            <if test="goodsid != null">#{goodsid},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateComment" parameterType="Comment">
+        update comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">type = #{type},</if>
+            <if test="farmid != null">farmId = #{farmid},</if>
+            <if test="goodsid != null">goodsId = #{goodsid},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where commentatorId = #{commentatorid}
+    </update>
+
+    <delete id="deleteCommentByCommentatorid" parameterType="String">
+        delete from comment where commentatorId = #{commentatorid}
+    </delete>
+
+    <delete id="deleteCommentByCommentatorids" parameterType="String">
+        delete from comment where commentatorId in 
+        <foreach item="commentatorid" collection="array" open="(" separator="," close=")">
+            #{commentatorid}
+        </foreach>
+    </delete>
+</mapper>

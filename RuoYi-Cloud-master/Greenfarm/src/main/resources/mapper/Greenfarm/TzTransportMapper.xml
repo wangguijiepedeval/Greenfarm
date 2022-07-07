@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzTransportMapper">
+    
+    <resultMap type="TzTransport" id="TzTransportResult">
+        <result property="transportId"    column="transport_id"    />
+        <result property="transName"    column="trans_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="chargeType"    column="charge_type"    />
+        <result property="isFreeFee"    column="is_free_fee"    />
+        <result property="hasFreeCondition"    column="has_free_condition"    />
+    </resultMap>
+
+    <sql id="selectTzTransportVo">
+        select transport_id, trans_name, create_time, shop_id, charge_type, is_free_fee, has_free_condition from tz_transport
+    </sql>
+
+    <select id="selectTzTransportList" parameterType="TzTransport" resultMap="TzTransportResult">
+        <include refid="selectTzTransportVo"/>
+        <where>  
+            <if test="transName != null  and transName != ''"> and trans_name like concat('%', #{transName}, '%')</if>
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+            <if test="chargeType != null "> and charge_type = #{chargeType}</if>
+            <if test="isFreeFee != null "> and is_free_fee = #{isFreeFee}</if>
+            <if test="hasFreeCondition != null "> and has_free_condition = #{hasFreeCondition}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzTransportByTransportId" parameterType="Long" resultMap="TzTransportResult">
+        <include refid="selectTzTransportVo"/>
+        where transport_id = #{transportId}
+    </select>
+        
+    <insert id="insertTzTransport" parameterType="TzTransport" useGeneratedKeys="true" keyProperty="transportId">
+        insert into tz_transport
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="transName != null">trans_name,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="shopId != null">shop_id,</if>
+            <if test="chargeType != null">charge_type,</if>
+            <if test="isFreeFee != null">is_free_fee,</if>
+            <if test="hasFreeCondition != null">has_free_condition,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="transName != null">#{transName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="shopId != null">#{shopId},</if>
+            <if test="chargeType != null">#{chargeType},</if>
+            <if test="isFreeFee != null">#{isFreeFee},</if>
+            <if test="hasFreeCondition != null">#{hasFreeCondition},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzTransport" parameterType="TzTransport">
+        update tz_transport
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="transName != null">trans_name = #{transName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="chargeType != null">charge_type = #{chargeType},</if>
+            <if test="isFreeFee != null">is_free_fee = #{isFreeFee},</if>
+            <if test="hasFreeCondition != null">has_free_condition = #{hasFreeCondition},</if>
+        </trim>
+        where transport_id = #{transportId}
+    </update>
+
+    <delete id="deleteTzTransportByTransportId" parameterType="Long">
+        delete from tz_transport where transport_id = #{transportId}
+    </delete>
+
+    <delete id="deleteTzTransportByTransportIds" parameterType="String">
+        delete from tz_transport where transport_id in 
+        <foreach item="transportId" collection="array" open="(" separator="," close=")">
+            #{transportId}
+        </foreach>
+    </delete>
+</mapper>

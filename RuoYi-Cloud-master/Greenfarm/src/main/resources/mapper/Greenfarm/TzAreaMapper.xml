@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzAreaMapper">
+    
+    <resultMap type="TzArea" id="TzAreaResult">
+        <result property="areaId"    column="area_id"    />
+        <result property="areaName"    column="area_name"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="level"    column="level"    />
+    </resultMap>
+
+    <sql id="selectTzAreaVo">
+        select area_id, area_name, parent_id, level from tz_area
+    </sql>
+
+    <select id="selectTzAreaList" parameterType="TzArea" resultMap="TzAreaResult">
+        <include refid="selectTzAreaVo"/>
+        <where>  
+            <if test="areaName != null  and areaName != ''"> and area_name like concat('%', #{areaName}, '%')</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="level != null "> and level = #{level}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzAreaByAreaId" parameterType="Long" resultMap="TzAreaResult">
+        <include refid="selectTzAreaVo"/>
+        where area_id = #{areaId}
+    </select>
+        
+    <insert id="insertTzArea" parameterType="TzArea" useGeneratedKeys="true" keyProperty="areaId">
+        insert into tz_area
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="areaName != null">area_name,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="level != null">level,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="areaName != null">#{areaName},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="level != null">#{level},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzArea" parameterType="TzArea">
+        update tz_area
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="areaName != null">area_name = #{areaName},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="level != null">level = #{level},</if>
+        </trim>
+        where area_id = #{areaId}
+    </update>
+
+    <delete id="deleteTzAreaByAreaId" parameterType="Long">
+        delete from tz_area where area_id = #{areaId}
+    </delete>
+
+    <delete id="deleteTzAreaByAreaIds" parameterType="String">
+        delete from tz_area where area_id in 
+        <foreach item="areaId" collection="array" open="(" separator="," close=")">
+            #{areaId}
+        </foreach>
+    </delete>
+</mapper>

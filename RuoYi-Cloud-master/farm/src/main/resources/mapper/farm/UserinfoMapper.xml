@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.farm.mapper.UserinfoMapper">
+    
+    <resultMap type="Userinfo" id="UserinfoResult">
+        <result property="uesrid"    column="uesrId"    />
+        <result property="username"    column="userName"    />
+        <result property="pswd"    column="pswd"    />
+        <result property="phone"    column="phone"    />
+        <result property="wechat"    column="wechat"    />
+        <result property="address"    column="address"    />
+        <result property="usertype"    column="userType"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectUserinfoVo">
+        select uesrId, userName, pswd, phone, wechat, address, userType, update_time, create_time from userinfo
+    </sql>
+
+    <select id="selectUserinfoList" parameterType="Userinfo" resultMap="UserinfoResult">
+        <include refid="selectUserinfoVo"/>
+        <where>  
+            <if test="username != null  and username != ''"> and userName like concat('%', #{username}, '%')</if>
+            <if test="pswd != null  and pswd != ''"> and pswd = #{pswd}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="wechat != null  and wechat != ''"> and wechat = #{wechat}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="usertype != null "> and userType = #{usertype}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserinfoByUesrid" parameterType="String" resultMap="UserinfoResult">
+        <include refid="selectUserinfoVo"/>
+        where uesrId = #{uesrid}
+    </select>
+        
+    <insert id="insertUserinfo" parameterType="Userinfo">
+        insert into userinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uesrid != null">uesrId,</if>
+            <if test="username != null and username != ''">userName,</if>
+            <if test="pswd != null and pswd != ''">pswd,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="wechat != null">wechat,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="usertype != null">userType,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uesrid != null">#{uesrid},</if>
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="pswd != null and pswd != ''">#{pswd},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="wechat != null">#{wechat},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="usertype != null">#{usertype},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserinfo" parameterType="Userinfo">
+        update userinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="username != null and username != ''">userName = #{username},</if>
+            <if test="pswd != null and pswd != ''">pswd = #{pswd},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="wechat != null">wechat = #{wechat},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="usertype != null">userType = #{usertype},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where uesrId = #{uesrid}
+    </update>
+
+    <delete id="deleteUserinfoByUesrid" parameterType="String">
+        delete from userinfo where uesrId = #{uesrid}
+    </delete>
+
+    <delete id="deleteUserinfoByUesrids" parameterType="String">
+        delete from userinfo where uesrId in 
+        <foreach item="uesrid" collection="array" open="(" separator="," close=")">
+            #{uesrid}
+        </foreach>
+    </delete>
+</mapper>

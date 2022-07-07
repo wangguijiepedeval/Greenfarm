@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzBasketMapper">
+    
+    <resultMap type="TzBasket" id="TzBasketResult">
+        <result property="basketId"    column="basket_id"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="prodId"    column="prod_id"    />
+        <result property="skuId"    column="sku_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="basketCount"    column="basket_count"    />
+        <result property="basketDate"    column="basket_date"    />
+        <result property="discountId"    column="discount_id"    />
+        <result property="distributionCardNo"    column="distribution_card_no"    />
+    </resultMap>
+
+    <sql id="selectTzBasketVo">
+        select basket_id, shop_id, prod_id, sku_id, user_id, basket_count, basket_date, discount_id, distribution_card_no from tz_basket
+    </sql>
+
+    <select id="selectTzBasketList" parameterType="TzBasket" resultMap="TzBasketResult">
+        <include refid="selectTzBasketVo"/>
+        <where>  
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+            <if test="prodId != null "> and prod_id = #{prodId}</if>
+            <if test="skuId != null "> and sku_id = #{skuId}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="basketCount != null "> and basket_count = #{basketCount}</if>
+            <if test="basketDate != null "> and basket_date = #{basketDate}</if>
+            <if test="discountId != null "> and discount_id = #{discountId}</if>
+            <if test="distributionCardNo != null  and distributionCardNo != ''"> and distribution_card_no = #{distributionCardNo}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzBasketByBasketId" parameterType="Long" resultMap="TzBasketResult">
+        <include refid="selectTzBasketVo"/>
+        where basket_id = #{basketId}
+    </select>
+        
+    <insert id="insertTzBasket" parameterType="TzBasket" useGeneratedKeys="true" keyProperty="basketId">
+        insert into tz_basket
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">shop_id,</if>
+            <if test="prodId != null">prod_id,</if>
+            <if test="skuId != null">sku_id,</if>
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="basketCount != null">basket_count,</if>
+            <if test="basketDate != null">basket_date,</if>
+            <if test="discountId != null">discount_id,</if>
+            <if test="distributionCardNo != null">distribution_card_no,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">#{shopId},</if>
+            <if test="prodId != null">#{prodId},</if>
+            <if test="skuId != null">#{skuId},</if>
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="basketCount != null">#{basketCount},</if>
+            <if test="basketDate != null">#{basketDate},</if>
+            <if test="discountId != null">#{discountId},</if>
+            <if test="distributionCardNo != null">#{distributionCardNo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzBasket" parameterType="TzBasket">
+        update tz_basket
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="prodId != null">prod_id = #{prodId},</if>
+            <if test="skuId != null">sku_id = #{skuId},</if>
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="basketCount != null">basket_count = #{basketCount},</if>
+            <if test="basketDate != null">basket_date = #{basketDate},</if>
+            <if test="discountId != null">discount_id = #{discountId},</if>
+            <if test="distributionCardNo != null">distribution_card_no = #{distributionCardNo},</if>
+        </trim>
+        where basket_id = #{basketId}
+    </update>
+
+    <delete id="deleteTzBasketByBasketId" parameterType="Long">
+        delete from tz_basket where basket_id = #{basketId}
+    </delete>
+
+    <delete id="deleteTzBasketByBasketIds" parameterType="String">
+        delete from tz_basket where basket_id in 
+        <foreach item="basketId" collection="array" open="(" separator="," close=")">
+            #{basketId}
+        </foreach>
+    </delete>
+</mapper>

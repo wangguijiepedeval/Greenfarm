@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzProdPropMapper">
+    
+    <resultMap type="TzProdProp" id="TzProdPropResult">
+        <result property="propId"    column="prop_id"    />
+        <result property="propName"    column="prop_name"    />
+        <result property="rule"    column="rule"    />
+        <result property="shopId"    column="shop_id"    />
+    </resultMap>
+
+    <sql id="selectTzProdPropVo">
+        select prop_id, prop_name, rule, shop_id from tz_prod_prop
+    </sql>
+
+    <select id="selectTzProdPropList" parameterType="TzProdProp" resultMap="TzProdPropResult">
+        <include refid="selectTzProdPropVo"/>
+        <where>  
+            <if test="propName != null  and propName != ''"> and prop_name like concat('%', #{propName}, '%')</if>
+            <if test="rule != null "> and rule = #{rule}</if>
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzProdPropByPropId" parameterType="Long" resultMap="TzProdPropResult">
+        <include refid="selectTzProdPropVo"/>
+        where prop_id = #{propId}
+    </select>
+        
+    <insert id="insertTzProdProp" parameterType="TzProdProp" useGeneratedKeys="true" keyProperty="propId">
+        insert into tz_prod_prop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="propName != null">prop_name,</if>
+            <if test="rule != null">rule,</if>
+            <if test="shopId != null">shop_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="propName != null">#{propName},</if>
+            <if test="rule != null">#{rule},</if>
+            <if test="shopId != null">#{shopId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzProdProp" parameterType="TzProdProp">
+        update tz_prod_prop
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="propName != null">prop_name = #{propName},</if>
+            <if test="rule != null">rule = #{rule},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
+        </trim>
+        where prop_id = #{propId}
+    </update>
+
+    <delete id="deleteTzProdPropByPropId" parameterType="Long">
+        delete from tz_prod_prop where prop_id = #{propId}
+    </delete>
+
+    <delete id="deleteTzProdPropByPropIds" parameterType="String">
+        delete from tz_prod_prop where prop_id in 
+        <foreach item="propId" collection="array" open="(" separator="," close=")">
+            #{propId}
+        </foreach>
+    </delete>
+</mapper>

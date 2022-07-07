@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzProdPropValueMapper">
+    
+    <resultMap type="TzProdPropValue" id="TzProdPropValueResult">
+        <result property="valueId"    column="value_id"    />
+        <result property="propValue"    column="prop_value"    />
+        <result property="propId"    column="prop_id"    />
+    </resultMap>
+
+    <sql id="selectTzProdPropValueVo">
+        select value_id, prop_value, prop_id from tz_prod_prop_value
+    </sql>
+
+    <select id="selectTzProdPropValueList" parameterType="TzProdPropValue" resultMap="TzProdPropValueResult">
+        <include refid="selectTzProdPropValueVo"/>
+        <where>  
+            <if test="propValue != null  and propValue != ''"> and prop_value = #{propValue}</if>
+            <if test="propId != null "> and prop_id = #{propId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzProdPropValueByValueId" parameterType="Long" resultMap="TzProdPropValueResult">
+        <include refid="selectTzProdPropValueVo"/>
+        where value_id = #{valueId}
+    </select>
+        
+    <insert id="insertTzProdPropValue" parameterType="TzProdPropValue" useGeneratedKeys="true" keyProperty="valueId">
+        insert into tz_prod_prop_value
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="propValue != null">prop_value,</if>
+            <if test="propId != null">prop_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="propValue != null">#{propValue},</if>
+            <if test="propId != null">#{propId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzProdPropValue" parameterType="TzProdPropValue">
+        update tz_prod_prop_value
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="propValue != null">prop_value = #{propValue},</if>
+            <if test="propId != null">prop_id = #{propId},</if>
+        </trim>
+        where value_id = #{valueId}
+    </update>
+
+    <delete id="deleteTzProdPropValueByValueId" parameterType="Long">
+        delete from tz_prod_prop_value where value_id = #{valueId}
+    </delete>
+
+    <delete id="deleteTzProdPropValueByValueIds" parameterType="String">
+        delete from tz_prod_prop_value where value_id in 
+        <foreach item="valueId" collection="array" open="(" separator="," close=")">
+            #{valueId}
+        </foreach>
+    </delete>
+</mapper>

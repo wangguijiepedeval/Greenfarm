@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzSensWordMapper">
+    
+    <resultMap type="TzSensWord" id="TzSensWordResult">
+        <result property="sensId"    column="sens_id"    />
+        <result property="words"    column="words"    />
+    </resultMap>
+
+    <sql id="selectTzSensWordVo">
+        select sens_id, words from tz_sens_word
+    </sql>
+
+    <select id="selectTzSensWordList" parameterType="TzSensWord" resultMap="TzSensWordResult">
+        <include refid="selectTzSensWordVo"/>
+        <where>  
+            <if test="words != null  and words != ''"> and words = #{words}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzSensWordBySensId" parameterType="Long" resultMap="TzSensWordResult">
+        <include refid="selectTzSensWordVo"/>
+        where sens_id = #{sensId}
+    </select>
+        
+    <insert id="insertTzSensWord" parameterType="TzSensWord" useGeneratedKeys="true" keyProperty="sensId">
+        insert into tz_sens_word
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="words != null">words,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="words != null">#{words},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzSensWord" parameterType="TzSensWord">
+        update tz_sens_word
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="words != null">words = #{words},</if>
+        </trim>
+        where sens_id = #{sensId}
+    </update>
+
+    <delete id="deleteTzSensWordBySensId" parameterType="Long">
+        delete from tz_sens_word where sens_id = #{sensId}
+    </delete>
+
+    <delete id="deleteTzSensWordBySensIds" parameterType="String">
+        delete from tz_sens_word where sens_id in 
+        <foreach item="sensId" collection="array" open="(" separator="," close=")">
+            #{sensId}
+        </foreach>
+    </delete>
+</mapper>

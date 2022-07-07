@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.farm.mapper.FarmMapper">
+    
+    <resultMap type="Farm" id="FarmResult">
+        <result property="farmid"    column="farmId"    />
+        <result property="farmname"    column="farmName"    />
+        <result property="farmphoto"    column="farmPhoto"    />
+        <result property="merchantid"    column="merchantId"    />
+        <result property="farmaddress"    column="farmAddress"    />
+        <result property="farmstatus"    column="farmStatus"    />
+        <result property="rent"    column="rent"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectFarmVo">
+        select farmId, farmName, farmPhoto, merchantId, farmAddress, farmStatus, rent, update_time, create_time from farm
+    </sql>
+
+    <select id="selectFarmList" parameterType="Farm" resultMap="FarmResult">
+        <include refid="selectFarmVo"/>
+        <where>  
+            <if test="farmname != null  and farmname != ''"> and farmName like concat('%', #{farmname}, '%')</if>
+            <if test="farmphoto != null  and farmphoto != ''"> and farmPhoto = #{farmphoto}</if>
+            <if test="merchantid != null  and merchantid != ''"> and merchantId = #{merchantid}</if>
+            <if test="farmaddress != null  and farmaddress != ''"> and farmAddress = #{farmaddress}</if>
+            <if test="farmstatus != null "> and farmStatus = #{farmstatus}</if>
+            <if test="rent != null "> and rent = #{rent}</if>
+        </where>
+    </select>
+    
+    <select id="selectFarmByFarmid" parameterType="String" resultMap="FarmResult">
+        <include refid="selectFarmVo"/>
+        where farmId = #{farmid}
+    </select>
+        
+    <insert id="insertFarm" parameterType="Farm">
+        insert into farm
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="farmid != null">farmId,</if>
+            <if test="farmname != null and farmname != ''">farmName,</if>
+            <if test="farmphoto != null">farmPhoto,</if>
+            <if test="merchantid != null and merchantid != ''">merchantId,</if>
+            <if test="farmaddress != null and farmaddress != ''">farmAddress,</if>
+            <if test="farmstatus != null">farmStatus,</if>
+            <if test="rent != null">rent,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="farmid != null">#{farmid},</if>
+            <if test="farmname != null and farmname != ''">#{farmname},</if>
+            <if test="farmphoto != null">#{farmphoto},</if>
+            <if test="merchantid != null and merchantid != ''">#{merchantid},</if>
+            <if test="farmaddress != null and farmaddress != ''">#{farmaddress},</if>
+            <if test="farmstatus != null">#{farmstatus},</if>
+            <if test="rent != null">#{rent},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFarm" parameterType="Farm">
+        update farm
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="farmname != null and farmname != ''">farmName = #{farmname},</if>
+            <if test="farmphoto != null">farmPhoto = #{farmphoto},</if>
+            <if test="merchantid != null and merchantid != ''">merchantId = #{merchantid},</if>
+            <if test="farmaddress != null and farmaddress != ''">farmAddress = #{farmaddress},</if>
+            <if test="farmstatus != null">farmStatus = #{farmstatus},</if>
+            <if test="rent != null">rent = #{rent},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where farmId = #{farmid}
+    </update>
+
+    <delete id="deleteFarmByFarmid" parameterType="String">
+        delete from farm where farmId = #{farmid}
+    </delete>
+
+    <delete id="deleteFarmByFarmids" parameterType="String">
+        delete from farm where farmId in 
+        <foreach item="farmid" collection="array" open="(" separator="," close=")">
+            #{farmid}
+        </foreach>
+    </delete>
+</mapper>

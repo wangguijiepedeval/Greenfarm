@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzCategoryBrandMapper">
+    
+    <resultMap type="TzCategoryBrand" id="TzCategoryBrandResult">
+        <result property="id"    column="id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="brandId"    column="brand_id"    />
+    </resultMap>
+
+    <sql id="selectTzCategoryBrandVo">
+        select id, category_id, brand_id from tz_category_brand
+    </sql>
+
+    <select id="selectTzCategoryBrandList" parameterType="TzCategoryBrand" resultMap="TzCategoryBrandResult">
+        <include refid="selectTzCategoryBrandVo"/>
+        <where>  
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="brandId != null "> and brand_id = #{brandId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzCategoryBrandById" parameterType="Long" resultMap="TzCategoryBrandResult">
+        <include refid="selectTzCategoryBrandVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTzCategoryBrand" parameterType="TzCategoryBrand" useGeneratedKeys="true" keyProperty="id">
+        insert into tz_category_brand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">category_id,</if>
+            <if test="brandId != null">brand_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="brandId != null">#{brandId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzCategoryBrand" parameterType="TzCategoryBrand">
+        update tz_category_brand
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="brandId != null">brand_id = #{brandId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTzCategoryBrandById" parameterType="Long">
+        delete from tz_category_brand where id = #{id}
+    </delete>
+
+    <delete id="deleteTzCategoryBrandByIds" parameterType="String">
+        delete from tz_category_brand where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

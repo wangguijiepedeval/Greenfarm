@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzTranscityFreeMapper">
+    
+    <resultMap type="TzTranscityFree" id="TzTranscityFreeResult">
+        <result property="transcityFreeId"    column="transcity_free_id"    />
+        <result property="transfeeFreeId"    column="transfee_free_id"    />
+        <result property="freeCityId"    column="free_city_id"    />
+    </resultMap>
+
+    <sql id="selectTzTranscityFreeVo">
+        select transcity_free_id, transfee_free_id, free_city_id from tz_transcity_free
+    </sql>
+
+    <select id="selectTzTranscityFreeList" parameterType="TzTranscityFree" resultMap="TzTranscityFreeResult">
+        <include refid="selectTzTranscityFreeVo"/>
+        <where>  
+            <if test="transfeeFreeId != null "> and transfee_free_id = #{transfeeFreeId}</if>
+            <if test="freeCityId != null "> and free_city_id = #{freeCityId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzTranscityFreeByTranscityFreeId" parameterType="Long" resultMap="TzTranscityFreeResult">
+        <include refid="selectTzTranscityFreeVo"/>
+        where transcity_free_id = #{transcityFreeId}
+    </select>
+        
+    <insert id="insertTzTranscityFree" parameterType="TzTranscityFree" useGeneratedKeys="true" keyProperty="transcityFreeId">
+        insert into tz_transcity_free
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="transfeeFreeId != null">transfee_free_id,</if>
+            <if test="freeCityId != null">free_city_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="transfeeFreeId != null">#{transfeeFreeId},</if>
+            <if test="freeCityId != null">#{freeCityId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzTranscityFree" parameterType="TzTranscityFree">
+        update tz_transcity_free
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="transfeeFreeId != null">transfee_free_id = #{transfeeFreeId},</if>
+            <if test="freeCityId != null">free_city_id = #{freeCityId},</if>
+        </trim>
+        where transcity_free_id = #{transcityFreeId}
+    </update>
+
+    <delete id="deleteTzTranscityFreeByTranscityFreeId" parameterType="Long">
+        delete from tz_transcity_free where transcity_free_id = #{transcityFreeId}
+    </delete>
+
+    <delete id="deleteTzTranscityFreeByTranscityFreeIds" parameterType="String">
+        delete from tz_transcity_free where transcity_free_id in 
+        <foreach item="transcityFreeId" collection="array" open="(" separator="," close=")">
+            #{transcityFreeId}
+        </foreach>
+    </delete>
+</mapper>

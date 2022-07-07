@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzTranscityMapper">
+    
+    <resultMap type="TzTranscity" id="TzTranscityResult">
+        <result property="transcityId"    column="transcity_id"    />
+        <result property="transfeeId"    column="transfee_id"    />
+        <result property="cityId"    column="city_id"    />
+    </resultMap>
+
+    <sql id="selectTzTranscityVo">
+        select transcity_id, transfee_id, city_id from tz_transcity
+    </sql>
+
+    <select id="selectTzTranscityList" parameterType="TzTranscity" resultMap="TzTranscityResult">
+        <include refid="selectTzTranscityVo"/>
+        <where>  
+            <if test="transfeeId != null "> and transfee_id = #{transfeeId}</if>
+            <if test="cityId != null "> and city_id = #{cityId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzTranscityByTranscityId" parameterType="Long" resultMap="TzTranscityResult">
+        <include refid="selectTzTranscityVo"/>
+        where transcity_id = #{transcityId}
+    </select>
+        
+    <insert id="insertTzTranscity" parameterType="TzTranscity" useGeneratedKeys="true" keyProperty="transcityId">
+        insert into tz_transcity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="transfeeId != null">transfee_id,</if>
+            <if test="cityId != null">city_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="transfeeId != null">#{transfeeId},</if>
+            <if test="cityId != null">#{cityId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzTranscity" parameterType="TzTranscity">
+        update tz_transcity
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="transfeeId != null">transfee_id = #{transfeeId},</if>
+            <if test="cityId != null">city_id = #{cityId},</if>
+        </trim>
+        where transcity_id = #{transcityId}
+    </update>
+
+    <delete id="deleteTzTranscityByTranscityId" parameterType="Long">
+        delete from tz_transcity where transcity_id = #{transcityId}
+    </delete>
+
+    <delete id="deleteTzTranscityByTranscityIds" parameterType="String">
+        delete from tz_transcity where transcity_id in 
+        <foreach item="transcityId" collection="array" open="(" separator="," close=")">
+            #{transcityId}
+        </foreach>
+    </delete>
+</mapper>

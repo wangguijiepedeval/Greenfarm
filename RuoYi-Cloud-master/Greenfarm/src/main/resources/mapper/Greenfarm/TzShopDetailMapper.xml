@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzShopDetailMapper">
+    
+    <resultMap type="TzShopDetail" id="TzShopDetailResult">
+        <result property="shopId"    column="shop_id"    />
+        <result property="shopName"    column="shop_name"    />
+        <result property="userId"    column="user_id"    />
+        <result property="shopType"    column="shop_type"    />
+        <result property="intro"    column="intro"    />
+        <result property="shopNotice"    column="shop_notice"    />
+        <result property="shopIndustry"    column="shop_industry"    />
+        <result property="shopOwner"    column="shop_owner"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="tel"    column="tel"    />
+        <result property="shopLat"    column="shop_lat"    />
+        <result property="shopLng"    column="shop_lng"    />
+        <result property="shopAddress"    column="shop_address"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="area"    column="area"    />
+        <result property="pcaCode"    column="pca_code"    />
+        <result property="shopLogo"    column="shop_logo"    />
+        <result property="shopPhotos"    column="shop_photos"    />
+        <result property="openTime"    column="open_time"    />
+        <result property="shopStatus"    column="shop_status"    />
+        <result property="transportType"    column="transport_type"    />
+        <result property="fixedFreight"    column="fixed_freight"    />
+        <result property="fullFreeShipping"    column="full_free_shipping"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="isDistribution"    column="is_distribution"    />
+    </resultMap>
+
+    <sql id="selectTzShopDetailVo">
+        select shop_id, shop_name, user_id, shop_type, intro, shop_notice, shop_industry, shop_owner, mobile, tel, shop_lat, shop_lng, shop_address, province, city, area, pca_code, shop_logo, shop_photos, open_time, shop_status, transport_type, fixed_freight, full_free_shipping, create_time, update_time, is_distribution from tz_shop_detail
+    </sql>
+
+    <select id="selectTzShopDetailList" parameterType="TzShopDetail" resultMap="TzShopDetailResult">
+        <include refid="selectTzShopDetailVo"/>
+        <where>  
+            <if test="shopName != null  and shopName != ''"> and shop_name like concat('%', #{shopName}, '%')</if>
+            <if test="userId != null  and userId != ''"> and user_id like concat('%', #{userId}, '%')</if>
+            <if test="shopType != null "> and shop_type like concat('%', #{shopType}, '%')</if>
+            <if test="intro != null  and intro != ''"> and intro like concat('%', #{intro}, '%')</if>
+            <if test="shopNotice != null  and shopNotice != ''"> and shop_notice like concat('%', #{shopNotice}, '%')</if>
+            <if test="shopIndustry != null "> and shop_industry like concat('%', #{shopIndustry}, '%')</if>
+            <if test="shopOwner != null  and shopOwner != ''"> and shop_owner like concat('%', #{shopOwner}, '%')</if>
+            <if test="mobile != null  and mobile != ''"> and mobile like concat('%', #{mobile}, '%')</if>
+            <if test="tel != null  and tel != ''"> and tel like concat('%', #{tel}, '%')</if>
+            <if test="shopLat != null  and shopLat != ''"> and shop_lat like concat('%', #{shopLat}, '%')</if>
+            <if test="shopLng != null  and shopLng != ''"> and shop_lng like concat('%', #{shopLng}, '%')</if>
+            <if test="shopAddress != null  and shopAddress != ''"> and shop_address like concat('%', #{shopAddress}, '%')</if>
+            <if test="province != null  and province != ''"> and province like concat('%', #{province}, '%')</if>
+            <if test="city != null  and city != ''"> and city like concat('%', #{city}, '%')</if>
+            <if test="area != null  and area != ''"> and area like concat('%', #{area}, '%')</if>
+            <if test="pcaCode != null  and pcaCode != ''"> and pca_code like concat('%', #{pcaCode}, '%')</if>
+            <if test="shopLogo != null  and shopLogo != ''"> and shop_logo like concat('%', #{shopLogo}, '%')</if>
+            <if test="shopPhotos != null  and shopPhotos != ''"> and shop_photos like concat('%', #{shopPhotos}, '%')</if>
+            <if test="openTime != null  and openTime != ''"> and open_time like concat('%', #{openTime}, '%')</if>
+            <if test="shopStatus != null "> and shop_status like concat('%', #{shopStatus}, '%')</if>
+            <if test="transportType != null "> and transport_type like concat('%', #{transportType}, '%')</if>
+            <if test="fixedFreight != null "> and fixed_freight like concat('%', #{fixedFreight}, '%')</if>
+            <if test="fullFreeShipping != null "> and full_free_shipping like concat('%', #{fullFreeShipping}, '%')</if>
+            <if test="isDistribution != null "> and is_distribution like concat('%', #{isDistribution}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectTzShopDetailByShopId" parameterType="Long" resultMap="TzShopDetailResult">
+        <include refid="selectTzShopDetailVo"/>
+        where shop_id = #{shopId}
+    </select>
+        
+    <insert id="insertTzShopDetail" parameterType="TzShopDetail" useGeneratedKeys="true" keyProperty="shopId">
+        insert into tz_shop_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopName != null">shop_name,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="shopType != null">shop_type,</if>
+            <if test="intro != null">intro,</if>
+            <if test="shopNotice != null">shop_notice,</if>
+            <if test="shopIndustry != null">shop_industry,</if>
+            <if test="shopOwner != null">shop_owner,</if>
+            <if test="mobile != null">mobile,</if>
+            <if test="tel != null">tel,</if>
+            <if test="shopLat != null">shop_lat,</if>
+            <if test="shopLng != null">shop_lng,</if>
+            <if test="shopAddress != null">shop_address,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="area != null">area,</if>
+            <if test="pcaCode != null">pca_code,</if>
+            <if test="shopLogo != null">shop_logo,</if>
+            <if test="shopPhotos != null">shop_photos,</if>
+            <if test="openTime != null">open_time,</if>
+            <if test="shopStatus != null">shop_status,</if>
+            <if test="transportType != null">transport_type,</if>
+            <if test="fixedFreight != null">fixed_freight,</if>
+            <if test="fullFreeShipping != null">full_free_shipping,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isDistribution != null">is_distribution,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopName != null">#{shopName},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="shopType != null">#{shopType},</if>
+            <if test="intro != null">#{intro},</if>
+            <if test="shopNotice != null">#{shopNotice},</if>
+            <if test="shopIndustry != null">#{shopIndustry},</if>
+            <if test="shopOwner != null">#{shopOwner},</if>
+            <if test="mobile != null">#{mobile},</if>
+            <if test="tel != null">#{tel},</if>
+            <if test="shopLat != null">#{shopLat},</if>
+            <if test="shopLng != null">#{shopLng},</if>
+            <if test="shopAddress != null">#{shopAddress},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="area != null">#{area},</if>
+            <if test="pcaCode != null">#{pcaCode},</if>
+            <if test="shopLogo != null">#{shopLogo},</if>
+            <if test="shopPhotos != null">#{shopPhotos},</if>
+            <if test="openTime != null">#{openTime},</if>
+            <if test="shopStatus != null">#{shopStatus},</if>
+            <if test="transportType != null">#{transportType},</if>
+            <if test="fixedFreight != null">#{fixedFreight},</if>
+            <if test="fullFreeShipping != null">#{fullFreeShipping},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isDistribution != null">#{isDistribution},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzShopDetail" parameterType="TzShopDetail">
+        update tz_shop_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopName != null">shop_name = #{shopName},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="shopType != null">shop_type = #{shopType},</if>
+            <if test="intro != null">intro = #{intro},</if>
+            <if test="shopNotice != null">shop_notice = #{shopNotice},</if>
+            <if test="shopIndustry != null">shop_industry = #{shopIndustry},</if>
+            <if test="shopOwner != null">shop_owner = #{shopOwner},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="tel != null">tel = #{tel},</if>
+            <if test="shopLat != null">shop_lat = #{shopLat},</if>
+            <if test="shopLng != null">shop_lng = #{shopLng},</if>
+            <if test="shopAddress != null">shop_address = #{shopAddress},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="area != null">area = #{area},</if>
+            <if test="pcaCode != null">pca_code = #{pcaCode},</if>
+            <if test="shopLogo != null">shop_logo = #{shopLogo},</if>
+            <if test="shopPhotos != null">shop_photos = #{shopPhotos},</if>
+            <if test="openTime != null">open_time = #{openTime},</if>
+            <if test="shopStatus != null">shop_status = #{shopStatus},</if>
+            <if test="transportType != null">transport_type = #{transportType},</if>
+            <if test="fixedFreight != null">fixed_freight = #{fixedFreight},</if>
+            <if test="fullFreeShipping != null">full_free_shipping = #{fullFreeShipping},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="isDistribution != null">is_distribution = #{isDistribution},</if>
+        </trim>
+        where shop_id = #{shopId}
+    </update>
+
+    <delete id="deleteTzShopDetailByShopId" parameterType="Long">
+        delete from tz_shop_detail where shop_id = #{shopId}
+    </delete>
+
+    <delete id="deleteTzShopDetailByShopIds" parameterType="String">
+        delete from tz_shop_detail where shop_id in 
+        <foreach item="shopId" collection="array" open="(" separator="," close=")">
+            #{shopId}
+        </foreach>
+    </delete>
+</mapper>

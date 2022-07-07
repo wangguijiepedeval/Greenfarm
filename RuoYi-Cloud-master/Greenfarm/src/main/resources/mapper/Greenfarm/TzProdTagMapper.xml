@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzProdTagMapper">
+    
+    <resultMap type="TzProdTag" id="TzProdTagResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="status"    column="status"    />
+        <result property="isDefault"    column="is_default"    />
+        <result property="prodCount"    column="prod_count"    />
+        <result property="style"    column="style"    />
+        <result property="seq"    column="seq"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleteTime"    column="delete_time"    />
+    </resultMap>
+
+    <sql id="selectTzProdTagVo">
+        select id, title, shop_id, status, is_default, prod_count, style, seq, create_time, update_time, delete_time from tz_prod_tag
+    </sql>
+
+    <select id="selectTzProdTagList" parameterType="TzProdTag" resultMap="TzProdTagResult">
+        <include refid="selectTzProdTagVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="isDefault != null "> and is_default = #{isDefault}</if>
+            <if test="prodCount != null "> and prod_count = #{prodCount}</if>
+            <if test="style != null "> and style = #{style}</if>
+            <if test="seq != null "> and seq = #{seq}</if>
+            <if test="deleteTime != null "> and delete_time = #{deleteTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzProdTagById" parameterType="Long" resultMap="TzProdTagResult">
+        <include refid="selectTzProdTagVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTzProdTag" parameterType="TzProdTag" useGeneratedKeys="true" keyProperty="id">
+        insert into tz_prod_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="shopId != null">shop_id,</if>
+            <if test="status != null">status,</if>
+            <if test="isDefault != null">is_default,</if>
+            <if test="prodCount != null">prod_count,</if>
+            <if test="style != null">style,</if>
+            <if test="seq != null">seq,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deleteTime != null">delete_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="shopId != null">#{shopId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="isDefault != null">#{isDefault},</if>
+            <if test="prodCount != null">#{prodCount},</if>
+            <if test="style != null">#{style},</if>
+            <if test="seq != null">#{seq},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deleteTime != null">#{deleteTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzProdTag" parameterType="TzProdTag">
+        update tz_prod_tag
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="isDefault != null">is_default = #{isDefault},</if>
+            <if test="prodCount != null">prod_count = #{prodCount},</if>
+            <if test="style != null">style = #{style},</if>
+            <if test="seq != null">seq = #{seq},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTzProdTagById" parameterType="Long">
+        delete from tz_prod_tag where id = #{id}
+    </delete>
+
+    <delete id="deleteTzProdTagByIds" parameterType="String">
+        delete from tz_prod_tag where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

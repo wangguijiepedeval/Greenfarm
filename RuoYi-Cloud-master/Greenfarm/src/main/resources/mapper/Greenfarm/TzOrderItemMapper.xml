@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzOrderItemMapper">
+    
+    <resultMap type="TzOrderItem" id="TzOrderItemResult">
+        <result property="orderItemId"    column="order_item_id"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="orderNumber"    column="order_number"    />
+        <result property="prodId"    column="prod_id"    />
+        <result property="skuId"    column="sku_id"    />
+        <result property="prodCount"    column="prod_count"    />
+        <result property="prodName"    column="prod_name"    />
+        <result property="skuName"    column="sku_name"    />
+        <result property="pic"    column="pic"    />
+        <result property="price"    column="price"    />
+        <result property="userId"    column="user_id"    />
+        <result property="productTotalAmount"    column="product_total_amount"    />
+        <result property="recTime"    column="rec_time"    />
+        <result property="commSts"    column="comm_sts"    />
+        <result property="distributionCardNo"    column="distribution_card_no"    />
+        <result property="basketDate"    column="basket_date"    />
+    </resultMap>
+
+    <sql id="selectTzOrderItemVo">
+        select order_item_id, shop_id, order_number, prod_id, sku_id, prod_count, prod_name, sku_name, pic, price, user_id, product_total_amount, rec_time, comm_sts, distribution_card_no, basket_date from tz_order_item
+    </sql>
+
+    <select id="selectTzOrderItemList" parameterType="TzOrderItem" resultMap="TzOrderItemResult">
+        <include refid="selectTzOrderItemVo"/>
+        <where>  
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+            <if test="orderNumber != null  and orderNumber != ''"> and order_number = #{orderNumber}</if>
+            <if test="prodId != null "> and prod_id = #{prodId}</if>
+            <if test="skuId != null "> and sku_id = #{skuId}</if>
+            <if test="prodCount != null "> and prod_count = #{prodCount}</if>
+            <if test="prodName != null  and prodName != ''"> and prod_name like concat('%', #{prodName}, '%')</if>
+            <if test="skuName != null  and skuName != ''"> and sku_name like concat('%', #{skuName}, '%')</if>
+            <if test="pic != null  and pic != ''"> and pic = #{pic}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="productTotalAmount != null "> and product_total_amount = #{productTotalAmount}</if>
+            <if test="recTime != null "> and rec_time = #{recTime}</if>
+            <if test="commSts != null "> and comm_sts = #{commSts}</if>
+            <if test="distributionCardNo != null  and distributionCardNo != ''"> and distribution_card_no = #{distributionCardNo}</if>
+            <if test="basketDate != null "> and basket_date = #{basketDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzOrderItemByOrderItemId" parameterType="Long" resultMap="TzOrderItemResult">
+        <include refid="selectTzOrderItemVo"/>
+        where order_item_id = #{orderItemId}
+    </select>
+        
+    <insert id="insertTzOrderItem" parameterType="TzOrderItem" useGeneratedKeys="true" keyProperty="orderItemId">
+        insert into tz_order_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">shop_id,</if>
+            <if test="orderNumber != null and orderNumber != ''">order_number,</if>
+            <if test="prodId != null">prod_id,</if>
+            <if test="skuId != null">sku_id,</if>
+            <if test="prodCount != null">prod_count,</if>
+            <if test="prodName != null and prodName != ''">prod_name,</if>
+            <if test="skuName != null">sku_name,</if>
+            <if test="pic != null and pic != ''">pic,</if>
+            <if test="price != null">price,</if>
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="productTotalAmount != null">product_total_amount,</if>
+            <if test="recTime != null">rec_time,</if>
+            <if test="commSts != null">comm_sts,</if>
+            <if test="distributionCardNo != null">distribution_card_no,</if>
+            <if test="basketDate != null">basket_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">#{shopId},</if>
+            <if test="orderNumber != null and orderNumber != ''">#{orderNumber},</if>
+            <if test="prodId != null">#{prodId},</if>
+            <if test="skuId != null">#{skuId},</if>
+            <if test="prodCount != null">#{prodCount},</if>
+            <if test="prodName != null and prodName != ''">#{prodName},</if>
+            <if test="skuName != null">#{skuName},</if>
+            <if test="pic != null and pic != ''">#{pic},</if>
+            <if test="price != null">#{price},</if>
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="productTotalAmount != null">#{productTotalAmount},</if>
+            <if test="recTime != null">#{recTime},</if>
+            <if test="commSts != null">#{commSts},</if>
+            <if test="distributionCardNo != null">#{distributionCardNo},</if>
+            <if test="basketDate != null">#{basketDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzOrderItem" parameterType="TzOrderItem">
+        update tz_order_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="orderNumber != null and orderNumber != ''">order_number = #{orderNumber},</if>
+            <if test="prodId != null">prod_id = #{prodId},</if>
+            <if test="skuId != null">sku_id = #{skuId},</if>
+            <if test="prodCount != null">prod_count = #{prodCount},</if>
+            <if test="prodName != null and prodName != ''">prod_name = #{prodName},</if>
+            <if test="skuName != null">sku_name = #{skuName},</if>
+            <if test="pic != null and pic != ''">pic = #{pic},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="productTotalAmount != null">product_total_amount = #{productTotalAmount},</if>
+            <if test="recTime != null">rec_time = #{recTime},</if>
+            <if test="commSts != null">comm_sts = #{commSts},</if>
+            <if test="distributionCardNo != null">distribution_card_no = #{distributionCardNo},</if>
+            <if test="basketDate != null">basket_date = #{basketDate},</if>
+        </trim>
+        where order_item_id = #{orderItemId}
+    </update>
+
+    <delete id="deleteTzOrderItemByOrderItemId" parameterType="Long">
+        delete from tz_order_item where order_item_id = #{orderItemId}
+    </delete>
+
+    <delete id="deleteTzOrderItemByOrderItemIds" parameterType="String">
+        delete from tz_order_item where order_item_id in 
+        <foreach item="orderItemId" collection="array" open="(" separator="," close=")">
+            #{orderItemId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzProdMapper">
+    
+    <resultMap type="TzProd" id="TzProdResult">
+        <result property="prodId"    column="prod_id"    />
+        <result property="prodName"    column="prod_name"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="oriPrice"    column="ori_price"    />
+        <result property="price"    column="price"    />
+        <result property="brief"    column="brief"    />
+        <result property="content"    column="content"    />
+        <result property="pic"    column="pic"    />
+        <result property="imgs"    column="imgs"    />
+        <result property="status"    column="status"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="soldNum"    column="sold_num"    />
+        <result property="totalStocks"    column="total_stocks"    />
+        <result property="deliveryMode"    column="delivery_mode"    />
+        <result property="deliveryTemplateId"    column="delivery_template_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="putawayTime"    column="putaway_time"    />
+        <result property="version"    column="version"    />
+    </resultMap>
+
+    <sql id="selectTzProdVo">
+        select prod_id, prod_name, shop_id, ori_price, price, brief, content, pic, imgs, status, category_id, sold_num, total_stocks, delivery_mode, delivery_template_id, create_time, update_time, putaway_time, version from tz_prod
+    </sql>
+
+    <select id="selectTzProdList" parameterType="TzProd" resultMap="TzProdResult">
+        <include refid="selectTzProdVo"/>
+        <where>  
+            <if test="prodName != null  and prodName != ''"> and prod_name like concat('%', #{prodName}, '%')</if>
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+            <if test="oriPrice != null "> and ori_price = #{oriPrice}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="brief != null  and brief != ''"> and brief = #{brief}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="pic != null  and pic != ''"> and pic = #{pic}</if>
+            <if test="imgs != null  and imgs != ''"> and imgs = #{imgs}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="soldNum != null "> and sold_num = #{soldNum}</if>
+            <if test="totalStocks != null "> and total_stocks = #{totalStocks}</if>
+            <if test="deliveryMode != null  and deliveryMode != ''"> and delivery_mode = #{deliveryMode}</if>
+            <if test="deliveryTemplateId != null "> and delivery_template_id = #{deliveryTemplateId}</if>
+            <if test="putawayTime != null "> and putaway_time = #{putawayTime}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzProdByProdId" parameterType="Long" resultMap="TzProdResult">
+        <include refid="selectTzProdVo"/>
+        where prod_id = #{prodId}
+    </select>
+        
+    <insert id="insertTzProd" parameterType="TzProd" useGeneratedKeys="true" keyProperty="prodId">
+        insert into tz_prod
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prodName != null and prodName != ''">prod_name,</if>
+            <if test="shopId != null">shop_id,</if>
+            <if test="oriPrice != null">ori_price,</if>
+            <if test="price != null">price,</if>
+            <if test="brief != null">brief,</if>
+            <if test="content != null">content,</if>
+            <if test="pic != null">pic,</if>
+            <if test="imgs != null">imgs,</if>
+            <if test="status != null">status,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="soldNum != null">sold_num,</if>
+            <if test="totalStocks != null">total_stocks,</if>
+            <if test="deliveryMode != null">delivery_mode,</if>
+            <if test="deliveryTemplateId != null">delivery_template_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="putawayTime != null">putaway_time,</if>
+            <if test="version != null">version,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prodName != null and prodName != ''">#{prodName},</if>
+            <if test="shopId != null">#{shopId},</if>
+            <if test="oriPrice != null">#{oriPrice},</if>
+            <if test="price != null">#{price},</if>
+            <if test="brief != null">#{brief},</if>
+            <if test="content != null">#{content},</if>
+            <if test="pic != null">#{pic},</if>
+            <if test="imgs != null">#{imgs},</if>
+            <if test="status != null">#{status},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="soldNum != null">#{soldNum},</if>
+            <if test="totalStocks != null">#{totalStocks},</if>
+            <if test="deliveryMode != null">#{deliveryMode},</if>
+            <if test="deliveryTemplateId != null">#{deliveryTemplateId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="putawayTime != null">#{putawayTime},</if>
+            <if test="version != null">#{version},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzProd" parameterType="TzProd">
+        update tz_prod
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="prodName != null and prodName != ''">prod_name = #{prodName},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="oriPrice != null">ori_price = #{oriPrice},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="brief != null">brief = #{brief},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="pic != null">pic = #{pic},</if>
+            <if test="imgs != null">imgs = #{imgs},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="soldNum != null">sold_num = #{soldNum},</if>
+            <if test="totalStocks != null">total_stocks = #{totalStocks},</if>
+            <if test="deliveryMode != null">delivery_mode = #{deliveryMode},</if>
+            <if test="deliveryTemplateId != null">delivery_template_id = #{deliveryTemplateId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="putawayTime != null">putaway_time = #{putawayTime},</if>
+            <if test="version != null">version = #{version},</if>
+        </trim>
+        where prod_id = #{prodId}
+    </update>
+
+    <delete id="deleteTzProdByProdId" parameterType="Long">
+        delete from tz_prod where prod_id = #{prodId}
+    </delete>
+
+    <delete id="deleteTzProdByProdIds" parameterType="String">
+        delete from tz_prod where prod_id in 
+        <foreach item="prodId" collection="array" open="(" separator="," close=")">
+            #{prodId}
+        </foreach>
+    </delete>
+</mapper>

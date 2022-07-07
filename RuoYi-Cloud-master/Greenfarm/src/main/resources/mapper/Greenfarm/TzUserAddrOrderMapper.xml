@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzUserAddrOrderMapper">
+    
+    <resultMap type="TzUserAddrOrder" id="TzUserAddrOrderResult">
+        <result property="addrOrderId"    column="addr_order_id"    />
+        <result property="addrId"    column="addr_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="receiver"    column="receiver"    />
+        <result property="provinceId"    column="province_id"    />
+        <result property="province"    column="province"    />
+        <result property="areaId"    column="area_id"    />
+        <result property="area"    column="area"    />
+        <result property="cityId"    column="city_id"    />
+        <result property="city"    column="city"    />
+        <result property="addr"    column="addr"    />
+        <result property="postCode"    column="post_code"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="version"    column="version"    />
+    </resultMap>
+
+    <sql id="selectTzUserAddrOrderVo">
+        select addr_order_id, addr_id, user_id, receiver, province_id, province, area_id, area, city_id, city, addr, post_code, mobile, create_time, version from tz_user_addr_order
+    </sql>
+
+    <select id="selectTzUserAddrOrderList" parameterType="TzUserAddrOrder" resultMap="TzUserAddrOrderResult">
+        <include refid="selectTzUserAddrOrderVo"/>
+        <where>  
+            <if test="addrId != null "> and addr_id = #{addrId}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="receiver != null  and receiver != ''"> and receiver = #{receiver}</if>
+            <if test="provinceId != null "> and province_id = #{provinceId}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="areaId != null "> and area_id = #{areaId}</if>
+            <if test="area != null  and area != ''"> and area = #{area}</if>
+            <if test="cityId != null "> and city_id = #{cityId}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="addr != null  and addr != ''"> and addr = #{addr}</if>
+            <if test="postCode != null  and postCode != ''"> and post_code = #{postCode}</if>
+            <if test="mobile != null  and mobile != ''"> and mobile = #{mobile}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzUserAddrOrderByAddrOrderId" parameterType="Long" resultMap="TzUserAddrOrderResult">
+        <include refid="selectTzUserAddrOrderVo"/>
+        where addr_order_id = #{addrOrderId}
+    </select>
+        
+    <insert id="insertTzUserAddrOrder" parameterType="TzUserAddrOrder" useGeneratedKeys="true" keyProperty="addrOrderId">
+        insert into tz_user_addr_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="addrId != null">addr_id,</if>
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="receiver != null">receiver,</if>
+            <if test="provinceId != null">province_id,</if>
+            <if test="province != null">province,</if>
+            <if test="areaId != null">area_id,</if>
+            <if test="area != null">area,</if>
+            <if test="cityId != null">city_id,</if>
+            <if test="city != null">city,</if>
+            <if test="addr != null">addr,</if>
+            <if test="postCode != null">post_code,</if>
+            <if test="mobile != null">mobile,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="version != null">version,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="addrId != null">#{addrId},</if>
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="receiver != null">#{receiver},</if>
+            <if test="provinceId != null">#{provinceId},</if>
+            <if test="province != null">#{province},</if>
+            <if test="areaId != null">#{areaId},</if>
+            <if test="area != null">#{area},</if>
+            <if test="cityId != null">#{cityId},</if>
+            <if test="city != null">#{city},</if>
+            <if test="addr != null">#{addr},</if>
+            <if test="postCode != null">#{postCode},</if>
+            <if test="mobile != null">#{mobile},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="version != null">#{version},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzUserAddrOrder" parameterType="TzUserAddrOrder">
+        update tz_user_addr_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="addrId != null">addr_id = #{addrId},</if>
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="receiver != null">receiver = #{receiver},</if>
+            <if test="provinceId != null">province_id = #{provinceId},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="areaId != null">area_id = #{areaId},</if>
+            <if test="area != null">area = #{area},</if>
+            <if test="cityId != null">city_id = #{cityId},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="addr != null">addr = #{addr},</if>
+            <if test="postCode != null">post_code = #{postCode},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="version != null">version = #{version},</if>
+        </trim>
+        where addr_order_id = #{addrOrderId}
+    </update>
+
+    <delete id="deleteTzUserAddrOrderByAddrOrderId" parameterType="Long">
+        delete from tz_user_addr_order where addr_order_id = #{addrOrderId}
+    </delete>
+
+    <delete id="deleteTzUserAddrOrderByAddrOrderIds" parameterType="String">
+        delete from tz_user_addr_order where addr_order_id in 
+        <foreach item="addrOrderId" collection="array" open="(" separator="," close=")">
+            #{addrOrderId}
+        </foreach>
+    </delete>
+</mapper>

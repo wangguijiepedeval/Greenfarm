@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzCategoryPropMapper">
+    
+    <resultMap type="TzCategoryProp" id="TzCategoryPropResult">
+        <result property="id"    column="id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="propId"    column="prop_id"    />
+    </resultMap>
+
+    <sql id="selectTzCategoryPropVo">
+        select id, category_id, prop_id from tz_category_prop
+    </sql>
+
+    <select id="selectTzCategoryPropList" parameterType="TzCategoryProp" resultMap="TzCategoryPropResult">
+        <include refid="selectTzCategoryPropVo"/>
+        <where>  
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="propId != null "> and prop_id = #{propId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzCategoryPropById" parameterType="Long" resultMap="TzCategoryPropResult">
+        <include refid="selectTzCategoryPropVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTzCategoryProp" parameterType="TzCategoryProp" useGeneratedKeys="true" keyProperty="id">
+        insert into tz_category_prop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">category_id,</if>
+            <if test="propId != null">prop_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="propId != null">#{propId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzCategoryProp" parameterType="TzCategoryProp">
+        update tz_category_prop
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="propId != null">prop_id = #{propId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTzCategoryPropById" parameterType="Long">
+        delete from tz_category_prop where id = #{id}
+    </delete>
+
+    <delete id="deleteTzCategoryPropByIds" parameterType="String">
+        delete from tz_category_prop where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

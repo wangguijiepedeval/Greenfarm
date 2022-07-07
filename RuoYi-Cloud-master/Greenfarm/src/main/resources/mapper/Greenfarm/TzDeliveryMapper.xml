@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzDeliveryMapper">
+    
+    <resultMap type="TzDelivery" id="TzDeliveryResult">
+        <result property="dvyId"    column="dvy_id"    />
+        <result property="dvyName"    column="dvy_name"    />
+        <result property="companyHomeUrl"    column="company_home_url"    />
+        <result property="recTime"    column="rec_time"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="queryUrl"    column="query_url"    />
+    </resultMap>
+
+    <sql id="selectTzDeliveryVo">
+        select dvy_id, dvy_name, company_home_url, rec_time, modify_time, query_url from tz_delivery
+    </sql>
+
+    <select id="selectTzDeliveryList" parameterType="TzDelivery" resultMap="TzDeliveryResult">
+        <include refid="selectTzDeliveryVo"/>
+        <where>  
+            <if test="dvyName != null  and dvyName != ''"> and dvy_name like concat('%', #{dvyName}, '%')</if>
+            <if test="companyHomeUrl != null  and companyHomeUrl != ''"> and company_home_url = #{companyHomeUrl}</if>
+            <if test="recTime != null "> and rec_time = #{recTime}</if>
+            <if test="modifyTime != null "> and modify_time = #{modifyTime}</if>
+            <if test="queryUrl != null  and queryUrl != ''"> and query_url = #{queryUrl}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzDeliveryByDvyId" parameterType="Long" resultMap="TzDeliveryResult">
+        <include refid="selectTzDeliveryVo"/>
+        where dvy_id = #{dvyId}
+    </select>
+        
+    <insert id="insertTzDelivery" parameterType="TzDelivery" useGeneratedKeys="true" keyProperty="dvyId">
+        insert into tz_delivery
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dvyName != null and dvyName != ''">dvy_name,</if>
+            <if test="companyHomeUrl != null">company_home_url,</if>
+            <if test="recTime != null">rec_time,</if>
+            <if test="modifyTime != null">modify_time,</if>
+            <if test="queryUrl != null and queryUrl != ''">query_url,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dvyName != null and dvyName != ''">#{dvyName},</if>
+            <if test="companyHomeUrl != null">#{companyHomeUrl},</if>
+            <if test="recTime != null">#{recTime},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+            <if test="queryUrl != null and queryUrl != ''">#{queryUrl},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzDelivery" parameterType="TzDelivery">
+        update tz_delivery
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dvyName != null and dvyName != ''">dvy_name = #{dvyName},</if>
+            <if test="companyHomeUrl != null">company_home_url = #{companyHomeUrl},</if>
+            <if test="recTime != null">rec_time = #{recTime},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime},</if>
+            <if test="queryUrl != null and queryUrl != ''">query_url = #{queryUrl},</if>
+        </trim>
+        where dvy_id = #{dvyId}
+    </update>
+
+    <delete id="deleteTzDeliveryByDvyId" parameterType="Long">
+        delete from tz_delivery where dvy_id = #{dvyId}
+    </delete>
+
+    <delete id="deleteTzDeliveryByDvyIds" parameterType="String">
+        delete from tz_delivery where dvy_id in 
+        <foreach item="dvyId" collection="array" open="(" separator="," close=")">
+            #{dvyId}
+        </foreach>
+    </delete>
+</mapper>

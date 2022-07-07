@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzTransfeeFreeMapper">
+    
+    <resultMap type="TzTransfeeFree" id="TzTransfeeFreeResult">
+        <result property="transfeeFreeId"    column="transfee_free_id"    />
+        <result property="transportId"    column="transport_id"    />
+        <result property="freeType"    column="free_type"    />
+        <result property="amount"    column="amount"    />
+        <result property="piece"    column="piece"    />
+    </resultMap>
+
+    <sql id="selectTzTransfeeFreeVo">
+        select transfee_free_id, transport_id, free_type, amount, piece from tz_transfee_free
+    </sql>
+
+    <select id="selectTzTransfeeFreeList" parameterType="TzTransfeeFree" resultMap="TzTransfeeFreeResult">
+        <include refid="selectTzTransfeeFreeVo"/>
+        <where>  
+            <if test="transportId != null "> and transport_id = #{transportId}</if>
+            <if test="freeType != null "> and free_type = #{freeType}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="piece != null "> and piece = #{piece}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzTransfeeFreeByTransfeeFreeId" parameterType="Long" resultMap="TzTransfeeFreeResult">
+        <include refid="selectTzTransfeeFreeVo"/>
+        where transfee_free_id = #{transfeeFreeId}
+    </select>
+        
+    <insert id="insertTzTransfeeFree" parameterType="TzTransfeeFree" useGeneratedKeys="true" keyProperty="transfeeFreeId">
+        insert into tz_transfee_free
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="transportId != null">transport_id,</if>
+            <if test="freeType != null">free_type,</if>
+            <if test="amount != null">amount,</if>
+            <if test="piece != null">piece,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="transportId != null">#{transportId},</if>
+            <if test="freeType != null">#{freeType},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="piece != null">#{piece},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzTransfeeFree" parameterType="TzTransfeeFree">
+        update tz_transfee_free
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="transportId != null">transport_id = #{transportId},</if>
+            <if test="freeType != null">free_type = #{freeType},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="piece != null">piece = #{piece},</if>
+        </trim>
+        where transfee_free_id = #{transfeeFreeId}
+    </update>
+
+    <delete id="deleteTzTransfeeFreeByTransfeeFreeId" parameterType="Long">
+        delete from tz_transfee_free where transfee_free_id = #{transfeeFreeId}
+    </delete>
+
+    <delete id="deleteTzTransfeeFreeByTransfeeFreeIds" parameterType="String">
+        delete from tz_transfee_free where transfee_free_id in 
+        <foreach item="transfeeFreeId" collection="array" open="(" separator="," close=")">
+            #{transfeeFreeId}
+        </foreach>
+    </delete>
+</mapper>

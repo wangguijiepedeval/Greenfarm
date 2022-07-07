@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzProdCommMapper">
+    
+    <resultMap type="TzProdComm" id="TzProdCommResult">
+        <result property="prodCommId"    column="prod_comm_id"    />
+        <result property="prodId"    column="prod_id"    />
+        <result property="orderItemId"    column="order_item_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="content"    column="content"    />
+        <result property="replyContent"    column="reply_content"    />
+        <result property="recTime"    column="rec_time"    />
+        <result property="replyTime"    column="reply_time"    />
+        <result property="replySts"    column="reply_sts"    />
+        <result property="postip"    column="postip"    />
+        <result property="score"    column="score"    />
+        <result property="usefulCounts"    column="useful_counts"    />
+        <result property="pics"    column="pics"    />
+        <result property="isAnonymous"    column="is_anonymous"    />
+        <result property="status"    column="status"    />
+        <result property="evaluate"    column="evaluate"    />
+    </resultMap>
+
+    <sql id="selectTzProdCommVo">
+        select prod_comm_id, prod_id, order_item_id, user_id, content, reply_content, rec_time, reply_time, reply_sts, postip, score, useful_counts, pics, is_anonymous, status, evaluate from tz_prod_comm
+    </sql>
+
+    <select id="selectTzProdCommList" parameterType="TzProdComm" resultMap="TzProdCommResult">
+        <include refid="selectTzProdCommVo"/>
+        <where>  
+            <if test="prodId != null "> and prod_id = #{prodId}</if>
+            <if test="orderItemId != null "> and order_item_id = #{orderItemId}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="replyContent != null  and replyContent != ''"> and reply_content = #{replyContent}</if>
+            <if test="recTime != null "> and rec_time = #{recTime}</if>
+            <if test="replyTime != null "> and reply_time = #{replyTime}</if>
+            <if test="replySts != null "> and reply_sts = #{replySts}</if>
+            <if test="postip != null  and postip != ''"> and postip = #{postip}</if>
+            <if test="score != null "> and score = #{score}</if>
+            <if test="usefulCounts != null "> and useful_counts = #{usefulCounts}</if>
+            <if test="pics != null  and pics != ''"> and pics = #{pics}</if>
+            <if test="isAnonymous != null "> and is_anonymous = #{isAnonymous}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="evaluate != null "> and evaluate = #{evaluate}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzProdCommByProdCommId" parameterType="Long" resultMap="TzProdCommResult">
+        <include refid="selectTzProdCommVo"/>
+        where prod_comm_id = #{prodCommId}
+    </select>
+        
+    <insert id="insertTzProdComm" parameterType="TzProdComm" useGeneratedKeys="true" keyProperty="prodCommId">
+        insert into tz_prod_comm
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prodId != null">prod_id,</if>
+            <if test="orderItemId != null">order_item_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="content != null">content,</if>
+            <if test="replyContent != null">reply_content,</if>
+            <if test="recTime != null">rec_time,</if>
+            <if test="replyTime != null">reply_time,</if>
+            <if test="replySts != null">reply_sts,</if>
+            <if test="postip != null">postip,</if>
+            <if test="score != null">score,</if>
+            <if test="usefulCounts != null">useful_counts,</if>
+            <if test="pics != null">pics,</if>
+            <if test="isAnonymous != null">is_anonymous,</if>
+            <if test="status != null">status,</if>
+            <if test="evaluate != null">evaluate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prodId != null">#{prodId},</if>
+            <if test="orderItemId != null">#{orderItemId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="replyContent != null">#{replyContent},</if>
+            <if test="recTime != null">#{recTime},</if>
+            <if test="replyTime != null">#{replyTime},</if>
+            <if test="replySts != null">#{replySts},</if>
+            <if test="postip != null">#{postip},</if>
+            <if test="score != null">#{score},</if>
+            <if test="usefulCounts != null">#{usefulCounts},</if>
+            <if test="pics != null">#{pics},</if>
+            <if test="isAnonymous != null">#{isAnonymous},</if>
+            <if test="status != null">#{status},</if>
+            <if test="evaluate != null">#{evaluate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzProdComm" parameterType="TzProdComm">
+        update tz_prod_comm
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="prodId != null">prod_id = #{prodId},</if>
+            <if test="orderItemId != null">order_item_id = #{orderItemId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="replyContent != null">reply_content = #{replyContent},</if>
+            <if test="recTime != null">rec_time = #{recTime},</if>
+            <if test="replyTime != null">reply_time = #{replyTime},</if>
+            <if test="replySts != null">reply_sts = #{replySts},</if>
+            <if test="postip != null">postip = #{postip},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="usefulCounts != null">useful_counts = #{usefulCounts},</if>
+            <if test="pics != null">pics = #{pics},</if>
+            <if test="isAnonymous != null">is_anonymous = #{isAnonymous},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="evaluate != null">evaluate = #{evaluate},</if>
+        </trim>
+        where prod_comm_id = #{prodCommId}
+    </update>
+
+    <delete id="deleteTzProdCommByProdCommId" parameterType="Long">
+        delete from tz_prod_comm where prod_comm_id = #{prodCommId}
+    </delete>
+
+    <delete id="deleteTzProdCommByProdCommIds" parameterType="String">
+        delete from tz_prod_comm where prod_comm_id in 
+        <foreach item="prodCommId" collection="array" open="(" separator="," close=")">
+            #{prodCommId}
+        </foreach>
+    </delete>
+</mapper>

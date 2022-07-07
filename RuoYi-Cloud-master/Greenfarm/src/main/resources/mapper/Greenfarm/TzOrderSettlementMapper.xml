@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzOrderSettlementMapper">
+    
+    <resultMap type="TzOrderSettlement" id="TzOrderSettlementResult">
+        <result property="settlementId"    column="settlement_id"    />
+        <result property="payNo"    column="pay_no"    />
+        <result property="bizPayNo"    column="biz_pay_no"    />
+        <result property="orderNumber"    column="order_number"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="payTypeName"    column="pay_type_name"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="isClearing"    column="is_clearing"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="clearingTime"    column="clearing_time"    />
+        <result property="version"    column="version"    />
+        <result property="payStatus"    column="pay_status"    />
+    </resultMap>
+
+    <sql id="selectTzOrderSettlementVo">
+        select settlement_id, pay_no, biz_pay_no, order_number, pay_type, pay_type_name, pay_amount, is_clearing, user_id, create_time, clearing_time, version, pay_status from tz_order_settlement
+    </sql>
+
+    <select id="selectTzOrderSettlementList" parameterType="TzOrderSettlement" resultMap="TzOrderSettlementResult">
+        <include refid="selectTzOrderSettlementVo"/>
+        <where>  
+            <if test="payNo != null  and payNo != ''"> and pay_no = #{payNo}</if>
+            <if test="bizPayNo != null  and bizPayNo != ''"> and biz_pay_no = #{bizPayNo}</if>
+            <if test="orderNumber != null  and orderNumber != ''"> and order_number = #{orderNumber}</if>
+            <if test="payType != null "> and pay_type = #{payType}</if>
+            <if test="payTypeName != null  and payTypeName != ''"> and pay_type_name like concat('%', #{payTypeName}, '%')</if>
+            <if test="payAmount != null "> and pay_amount = #{payAmount}</if>
+            <if test="isClearing != null "> and is_clearing = #{isClearing}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="clearingTime != null "> and clearing_time = #{clearingTime}</if>
+            <if test="version != null "> and version = #{version}</if>
+            <if test="payStatus != null "> and pay_status = #{payStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzOrderSettlementBySettlementId" parameterType="Long" resultMap="TzOrderSettlementResult">
+        <include refid="selectTzOrderSettlementVo"/>
+        where settlement_id = #{settlementId}
+    </select>
+        
+    <insert id="insertTzOrderSettlement" parameterType="TzOrderSettlement" useGeneratedKeys="true" keyProperty="settlementId">
+        insert into tz_order_settlement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="payNo != null">pay_no,</if>
+            <if test="bizPayNo != null">biz_pay_no,</if>
+            <if test="orderNumber != null">order_number,</if>
+            <if test="payType != null">pay_type,</if>
+            <if test="payTypeName != null">pay_type_name,</if>
+            <if test="payAmount != null">pay_amount,</if>
+            <if test="isClearing != null">is_clearing,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="clearingTime != null">clearing_time,</if>
+            <if test="version != null">version,</if>
+            <if test="payStatus != null">pay_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="payNo != null">#{payNo},</if>
+            <if test="bizPayNo != null">#{bizPayNo},</if>
+            <if test="orderNumber != null">#{orderNumber},</if>
+            <if test="payType != null">#{payType},</if>
+            <if test="payTypeName != null">#{payTypeName},</if>
+            <if test="payAmount != null">#{payAmount},</if>
+            <if test="isClearing != null">#{isClearing},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="clearingTime != null">#{clearingTime},</if>
+            <if test="version != null">#{version},</if>
+            <if test="payStatus != null">#{payStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzOrderSettlement" parameterType="TzOrderSettlement">
+        update tz_order_settlement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="payNo != null">pay_no = #{payNo},</if>
+            <if test="bizPayNo != null">biz_pay_no = #{bizPayNo},</if>
+            <if test="orderNumber != null">order_number = #{orderNumber},</if>
+            <if test="payType != null">pay_type = #{payType},</if>
+            <if test="payTypeName != null">pay_type_name = #{payTypeName},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="isClearing != null">is_clearing = #{isClearing},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="clearingTime != null">clearing_time = #{clearingTime},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="payStatus != null">pay_status = #{payStatus},</if>
+        </trim>
+        where settlement_id = #{settlementId}
+    </update>
+
+    <delete id="deleteTzOrderSettlementBySettlementId" parameterType="Long">
+        delete from tz_order_settlement where settlement_id = #{settlementId}
+    </delete>
+
+    <delete id="deleteTzOrderSettlementBySettlementIds" parameterType="String">
+        delete from tz_order_settlement where settlement_id in 
+        <foreach item="settlementId" collection="array" open="(" separator="," close=")">
+            #{settlementId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.farm.mapper.CartMapper">
+    
+    <resultMap type="Cart" id="CartResult">
+        <result property="userid"    column="userId"    />
+        <result property="goodsid"    column="goodsId"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectCartVo">
+        select userId, goodsId, quantity, update_time, create_time from cart
+    </sql>
+
+    <select id="selectCartList" parameterType="Cart" resultMap="CartResult">
+        <include refid="selectCartVo"/>
+        <where>  
+            <if test="userid != null  and userid != ''"> and userId = #{userid}</if>
+            <if test="goodsid != null  and goodsid != ''"> and goodsId = #{goodsid}</if>
+            <if test="quantity != null "> and quantity = #{quantity}</if>
+        </where>
+    </select>
+    
+    <select id="selectCartByUserid" parameterType="String" resultMap="CartResult">
+        <include refid="selectCartVo"/>
+        where userId = #{userid}
+    </select>
+        
+    <insert id="insertCart" parameterType="Cart">
+        insert into cart
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userid != null and userid != ''">userId,</if>
+            <if test="goodsid != null and goodsid != ''">goodsId,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userid != null and userid != ''">#{userid},</if>
+            <if test="goodsid != null and goodsid != ''">#{goodsid},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCart" parameterType="Cart">
+        update cart
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsid != null and goodsid != ''">goodsId = #{goodsid},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where userId = #{userid}
+    </update>
+
+    <delete id="deleteCartByUserid" parameterType="String">
+        delete from cart where userId = #{userid}
+    </delete>
+
+    <delete id="deleteCartByUserids" parameterType="String">
+        delete from cart where userId in 
+        <foreach item="userid" collection="array" open="(" separator="," close=")">
+            #{userid}
+        </foreach>
+    </delete>
+</mapper>

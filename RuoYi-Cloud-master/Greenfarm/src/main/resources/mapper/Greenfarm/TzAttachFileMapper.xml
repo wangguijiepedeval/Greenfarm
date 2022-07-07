@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzAttachFileMapper">
+    
+    <resultMap type="TzAttachFile" id="TzAttachFileResult">
+        <result property="fileId"    column="file_id"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="fileType"    column="file_type"    />
+        <result property="fileSize"    column="file_size"    />
+        <result property="uploadTime"    column="upload_time"    />
+        <result property="fileJoinId"    column="file_join_id"    />
+        <result property="fileJoinType"    column="file_join_type"    />
+    </resultMap>
+
+    <sql id="selectTzAttachFileVo">
+        select file_id, file_path, file_type, file_size, upload_time, file_join_id, file_join_type from tz_attach_file
+    </sql>
+
+    <select id="selectTzAttachFileList" parameterType="TzAttachFile" resultMap="TzAttachFileResult">
+        <include refid="selectTzAttachFileVo"/>
+        <where>  
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+            <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
+            <if test="fileSize != null "> and file_size = #{fileSize}</if>
+            <if test="uploadTime != null "> and upload_time = #{uploadTime}</if>
+            <if test="fileJoinId != null "> and file_join_id = #{fileJoinId}</if>
+            <if test="fileJoinType != null "> and file_join_type = #{fileJoinType}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzAttachFileByFileId" parameterType="Long" resultMap="TzAttachFileResult">
+        <include refid="selectTzAttachFileVo"/>
+        where file_id = #{fileId}
+    </select>
+        
+    <insert id="insertTzAttachFile" parameterType="TzAttachFile" useGeneratedKeys="true" keyProperty="fileId">
+        insert into tz_attach_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="filePath != null">file_path,</if>
+            <if test="fileType != null">file_type,</if>
+            <if test="fileSize != null">file_size,</if>
+            <if test="uploadTime != null">upload_time,</if>
+            <if test="fileJoinId != null">file_join_id,</if>
+            <if test="fileJoinType != null">file_join_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="filePath != null">#{filePath},</if>
+            <if test="fileType != null">#{fileType},</if>
+            <if test="fileSize != null">#{fileSize},</if>
+            <if test="uploadTime != null">#{uploadTime},</if>
+            <if test="fileJoinId != null">#{fileJoinId},</if>
+            <if test="fileJoinType != null">#{fileJoinType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzAttachFile" parameterType="TzAttachFile">
+        update tz_attach_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="fileType != null">file_type = #{fileType},</if>
+            <if test="fileSize != null">file_size = #{fileSize},</if>
+            <if test="uploadTime != null">upload_time = #{uploadTime},</if>
+            <if test="fileJoinId != null">file_join_id = #{fileJoinId},</if>
+            <if test="fileJoinType != null">file_join_type = #{fileJoinType},</if>
+        </trim>
+        where file_id = #{fileId}
+    </update>
+
+    <delete id="deleteTzAttachFileByFileId" parameterType="Long">
+        delete from tz_attach_file where file_id = #{fileId}
+    </delete>
+
+    <delete id="deleteTzAttachFileByFileIds" parameterType="String">
+        delete from tz_attach_file where file_id in 
+        <foreach item="fileId" collection="array" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+    </delete>
+</mapper>

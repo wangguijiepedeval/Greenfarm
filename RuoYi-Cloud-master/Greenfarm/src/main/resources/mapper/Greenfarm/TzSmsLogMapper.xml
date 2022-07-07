@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzSmsLogMapper">
+    
+    <resultMap type="TzSmsLog" id="TzSmsLogResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userPhone"    column="user_phone"    />
+        <result property="content"    column="content"    />
+        <result property="mobileCode"    column="mobile_code"    />
+        <result property="type"    column="type"    />
+        <result property="recDate"    column="rec_date"    />
+        <result property="responseCode"    column="response_code"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectTzSmsLogVo">
+        select id, user_id, user_phone, content, mobile_code, type, rec_date, response_code, status from tz_sms_log
+    </sql>
+
+    <select id="selectTzSmsLogList" parameterType="TzSmsLog" resultMap="TzSmsLogResult">
+        <include refid="selectTzSmsLogVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="userPhone != null  and userPhone != ''"> and user_phone = #{userPhone}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="mobileCode != null  and mobileCode != ''"> and mobile_code = #{mobileCode}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="recDate != null "> and rec_date = #{recDate}</if>
+            <if test="responseCode != null  and responseCode != ''"> and response_code = #{responseCode}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzSmsLogById" parameterType="Long" resultMap="TzSmsLogResult">
+        <include refid="selectTzSmsLogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTzSmsLog" parameterType="TzSmsLog" useGeneratedKeys="true" keyProperty="id">
+        insert into tz_sms_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="userPhone != null and userPhone != ''">user_phone,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="mobileCode != null and mobileCode != ''">mobile_code,</if>
+            <if test="type != null">type,</if>
+            <if test="recDate != null">rec_date,</if>
+            <if test="responseCode != null">response_code,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="userPhone != null and userPhone != ''">#{userPhone},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="mobileCode != null and mobileCode != ''">#{mobileCode},</if>
+            <if test="type != null">#{type},</if>
+            <if test="recDate != null">#{recDate},</if>
+            <if test="responseCode != null">#{responseCode},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzSmsLog" parameterType="TzSmsLog">
+        update tz_sms_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userPhone != null and userPhone != ''">user_phone = #{userPhone},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="mobileCode != null and mobileCode != ''">mobile_code = #{mobileCode},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="recDate != null">rec_date = #{recDate},</if>
+            <if test="responseCode != null">response_code = #{responseCode},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTzSmsLogById" parameterType="Long">
+        delete from tz_sms_log where id = #{id}
+    </delete>
+
+    <delete id="deleteTzSmsLogByIds" parameterType="String">
+        delete from tz_sms_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

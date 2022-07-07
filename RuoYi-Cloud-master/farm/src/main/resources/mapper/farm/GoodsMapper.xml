@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.farm.mapper.GoodsMapper">
+    
+    <resultMap type="Goods" id="GoodsResult">
+        <result property="goodsid"    column="goodsId"    />
+        <result property="goodsname"    column="goodsName"    />
+        <result property="goodsphoto"    column="goodsPhoto"    />
+        <result property="goodsprice"    column="goodsPrice"    />
+        <result property="introduce"    column="introduce"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectGoodsVo">
+        select goodsId, goodsName, goodsPhoto, goodsPrice, introduce, update_time, create_time from goods
+    </sql>
+
+    <select id="selectGoodsList" parameterType="Goods" resultMap="GoodsResult">
+        <include refid="selectGoodsVo"/>
+        <where>  
+            <if test="goodsname != null  and goodsname != ''"> and goodsName like concat('%', #{goodsname}, '%')</if>
+            <if test="goodsphoto != null  and goodsphoto != ''"> and goodsPhoto = #{goodsphoto}</if>
+            <if test="goodsprice != null "> and goodsPrice = #{goodsprice}</if>
+            <if test="introduce != null  and introduce != ''"> and introduce = #{introduce}</if>
+        </where>
+    </select>
+    
+    <select id="selectGoodsByGoodsid" parameterType="String" resultMap="GoodsResult">
+        <include refid="selectGoodsVo"/>
+        where goodsId = #{goodsid}
+    </select>
+        
+    <insert id="insertGoods" parameterType="Goods">
+        insert into goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsid != null">goodsId,</if>
+            <if test="goodsname != null and goodsname != ''">goodsName,</if>
+            <if test="goodsphoto != null">goodsPhoto,</if>
+            <if test="goodsprice != null">goodsPrice,</if>
+            <if test="introduce != null">introduce,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsid != null">#{goodsid},</if>
+            <if test="goodsname != null and goodsname != ''">#{goodsname},</if>
+            <if test="goodsphoto != null">#{goodsphoto},</if>
+            <if test="goodsprice != null">#{goodsprice},</if>
+            <if test="introduce != null">#{introduce},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGoods" parameterType="Goods">
+        update goods
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsname != null and goodsname != ''">goodsName = #{goodsname},</if>
+            <if test="goodsphoto != null">goodsPhoto = #{goodsphoto},</if>
+            <if test="goodsprice != null">goodsPrice = #{goodsprice},</if>
+            <if test="introduce != null">introduce = #{introduce},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where goodsId = #{goodsid}
+    </update>
+
+    <delete id="deleteGoodsByGoodsid" parameterType="String">
+        delete from goods where goodsId = #{goodsid}
+    </delete>
+
+    <delete id="deleteGoodsByGoodsids" parameterType="String">
+        delete from goods where goodsId in 
+        <foreach item="goodsid" collection="array" open="(" separator="," close=")">
+            #{goodsid}
+        </foreach>
+    </delete>
+</mapper>

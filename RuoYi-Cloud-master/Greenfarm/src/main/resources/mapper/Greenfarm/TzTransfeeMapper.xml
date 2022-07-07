@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzTransfeeMapper">
+    
+    <resultMap type="TzTransfee" id="TzTransfeeResult">
+        <result property="transfeeId"    column="transfee_id"    />
+        <result property="transportId"    column="transport_id"    />
+        <result property="continuousPiece"    column="continuous_piece"    />
+        <result property="firstPiece"    column="first_piece"    />
+        <result property="continuousFee"    column="continuous_fee"    />
+        <result property="firstFee"    column="first_fee"    />
+    </resultMap>
+
+    <sql id="selectTzTransfeeVo">
+        select transfee_id, transport_id, continuous_piece, first_piece, continuous_fee, first_fee from tz_transfee
+    </sql>
+
+    <select id="selectTzTransfeeList" parameterType="TzTransfee" resultMap="TzTransfeeResult">
+        <include refid="selectTzTransfeeVo"/>
+        <where>  
+            <if test="transportId != null "> and transport_id = #{transportId}</if>
+            <if test="continuousPiece != null "> and continuous_piece = #{continuousPiece}</if>
+            <if test="firstPiece != null "> and first_piece = #{firstPiece}</if>
+            <if test="continuousFee != null "> and continuous_fee = #{continuousFee}</if>
+            <if test="firstFee != null "> and first_fee = #{firstFee}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzTransfeeByTransfeeId" parameterType="Long" resultMap="TzTransfeeResult">
+        <include refid="selectTzTransfeeVo"/>
+        where transfee_id = #{transfeeId}
+    </select>
+        
+    <insert id="insertTzTransfee" parameterType="TzTransfee" useGeneratedKeys="true" keyProperty="transfeeId">
+        insert into tz_transfee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="transportId != null">transport_id,</if>
+            <if test="continuousPiece != null">continuous_piece,</if>
+            <if test="firstPiece != null">first_piece,</if>
+            <if test="continuousFee != null">continuous_fee,</if>
+            <if test="firstFee != null">first_fee,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="transportId != null">#{transportId},</if>
+            <if test="continuousPiece != null">#{continuousPiece},</if>
+            <if test="firstPiece != null">#{firstPiece},</if>
+            <if test="continuousFee != null">#{continuousFee},</if>
+            <if test="firstFee != null">#{firstFee},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzTransfee" parameterType="TzTransfee">
+        update tz_transfee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="transportId != null">transport_id = #{transportId},</if>
+            <if test="continuousPiece != null">continuous_piece = #{continuousPiece},</if>
+            <if test="firstPiece != null">first_piece = #{firstPiece},</if>
+            <if test="continuousFee != null">continuous_fee = #{continuousFee},</if>
+            <if test="firstFee != null">first_fee = #{firstFee},</if>
+        </trim>
+        where transfee_id = #{transfeeId}
+    </update>
+
+    <delete id="deleteTzTransfeeByTransfeeId" parameterType="Long">
+        delete from tz_transfee where transfee_id = #{transfeeId}
+    </delete>
+
+    <delete id="deleteTzTransfeeByTransfeeIds" parameterType="String">
+        delete from tz_transfee where transfee_id in 
+        <foreach item="transfeeId" collection="array" open="(" separator="," close=")">
+            #{transfeeId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzHotSearchMapper">
+    
+    <resultMap type="TzHotSearch" id="TzHotSearchResult">
+        <result property="hotSearchId"    column="hot_search_id"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="content"    column="content"    />
+        <result property="recDate"    column="rec_date"    />
+        <result property="seq"    column="seq"    />
+        <result property="status"    column="status"    />
+        <result property="title"    column="title"    />
+    </resultMap>
+
+    <sql id="selectTzHotSearchVo">
+        select hot_search_id, shop_id, content, rec_date, seq, status, title from tz_hot_search
+    </sql>
+
+    <select id="selectTzHotSearchList" parameterType="TzHotSearch" resultMap="TzHotSearchResult">
+        <include refid="selectTzHotSearchVo"/>
+        <where>  
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="recDate != null "> and rec_date = #{recDate}</if>
+            <if test="seq != null "> and seq = #{seq}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzHotSearchByHotSearchId" parameterType="Long" resultMap="TzHotSearchResult">
+        <include refid="selectTzHotSearchVo"/>
+        where hot_search_id = #{hotSearchId}
+    </select>
+        
+    <insert id="insertTzHotSearch" parameterType="TzHotSearch" useGeneratedKeys="true" keyProperty="hotSearchId">
+        insert into tz_hot_search
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">shop_id,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="recDate != null">rec_date,</if>
+            <if test="seq != null">seq,</if>
+            <if test="status != null">status,</if>
+            <if test="title != null and title != ''">title,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">#{shopId},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="recDate != null">#{recDate},</if>
+            <if test="seq != null">#{seq},</if>
+            <if test="status != null">#{status},</if>
+            <if test="title != null and title != ''">#{title},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzHotSearch" parameterType="TzHotSearch">
+        update tz_hot_search
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="recDate != null">rec_date = #{recDate},</if>
+            <if test="seq != null">seq = #{seq},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+        </trim>
+        where hot_search_id = #{hotSearchId}
+    </update>
+
+    <delete id="deleteTzHotSearchByHotSearchId" parameterType="Long">
+        delete from tz_hot_search where hot_search_id = #{hotSearchId}
+    </delete>
+
+    <delete id="deleteTzHotSearchByHotSearchIds" parameterType="String">
+        delete from tz_hot_search where hot_search_id in 
+        <foreach item="hotSearchId" collection="array" open="(" separator="," close=")">
+            #{hotSearchId}
+        </foreach>
+    </delete>
+</mapper>

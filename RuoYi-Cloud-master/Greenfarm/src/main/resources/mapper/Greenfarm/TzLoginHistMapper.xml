@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzLoginHistMapper">
+    
+    <resultMap type="TzLoginHist" id="TzLoginHistResult">
+        <result property="id"    column="id"    />
+        <result property="area"    column="area"    />
+        <result property="country"    column="country"    />
+        <result property="userId"    column="user_id"    />
+        <result property="ip"    column="ip"    />
+        <result property="loginTime"    column="login_time"    />
+    </resultMap>
+
+    <sql id="selectTzLoginHistVo">
+        select id, area, country, user_id, ip, login_time from tz_login_hist
+    </sql>
+
+    <select id="selectTzLoginHistList" parameterType="TzLoginHist" resultMap="TzLoginHistResult">
+        <include refid="selectTzLoginHistVo"/>
+        <where>  
+            <if test="area != null  and area != ''"> and area = #{area}</if>
+            <if test="country != null  and country != ''"> and country = #{country}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
+            <if test="loginTime != null "> and login_time = #{loginTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzLoginHistById" parameterType="Long" resultMap="TzLoginHistResult">
+        <include refid="selectTzLoginHistVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTzLoginHist" parameterType="TzLoginHist" useGeneratedKeys="true" keyProperty="id">
+        insert into tz_login_hist
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="area != null">area,</if>
+            <if test="country != null">country,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="ip != null and ip != ''">ip,</if>
+            <if test="loginTime != null">login_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="area != null">#{area},</if>
+            <if test="country != null">#{country},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="ip != null and ip != ''">#{ip},</if>
+            <if test="loginTime != null">#{loginTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzLoginHist" parameterType="TzLoginHist">
+        update tz_login_hist
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="area != null">area = #{area},</if>
+            <if test="country != null">country = #{country},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="ip != null and ip != ''">ip = #{ip},</if>
+            <if test="loginTime != null">login_time = #{loginTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTzLoginHistById" parameterType="Long">
+        delete from tz_login_hist where id = #{id}
+    </delete>
+
+    <delete id="deleteTzLoginHistByIds" parameterType="String">
+        delete from tz_login_hist where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

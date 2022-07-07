@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.farm.mapper.MessageMapper">
+    
+    <resultMap type="Message" id="MessageResult">
+        <result property="messageid"    column="messageId"    />
+        <result property="senderid"    column="senderId"    />
+        <result property="receiveid"    column="receiveId"    />
+        <result property="content"    column="content"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectMessageVo">
+        select messageId, senderId, receiveId, content, update_time, create_time from message
+    </sql>
+
+    <select id="selectMessageList" parameterType="Message" resultMap="MessageResult">
+        <include refid="selectMessageVo"/>
+        <where>  
+            <if test="senderid != null  and senderid != ''"> and senderId = #{senderid}</if>
+            <if test="receiveid != null  and receiveid != ''"> and receiveId = #{receiveid}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+        </where>
+    </select>
+    
+    <select id="selectMessageByMessageid" parameterType="Long" resultMap="MessageResult">
+        <include refid="selectMessageVo"/>
+        where messageId = #{messageid}
+    </select>
+        
+    <insert id="insertMessage" parameterType="Message" useGeneratedKeys="true" keyProperty="messageid">
+        insert into message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="senderid != null and senderid != ''">senderId,</if>
+            <if test="receiveid != null and receiveid != ''">receiveId,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="senderid != null and senderid != ''">#{senderid},</if>
+            <if test="receiveid != null and receiveid != ''">#{receiveid},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMessage" parameterType="Message">
+        update message
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="senderid != null and senderid != ''">senderId = #{senderid},</if>
+            <if test="receiveid != null and receiveid != ''">receiveId = #{receiveid},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where messageId = #{messageid}
+    </update>
+
+    <delete id="deleteMessageByMessageid" parameterType="Long">
+        delete from message where messageId = #{messageid}
+    </delete>
+
+    <delete id="deleteMessageByMessageids" parameterType="String">
+        delete from message where messageId in 
+        <foreach item="messageid" collection="array" open="(" separator="," close=")">
+            #{messageid}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzUserCollectionMapper">
+    
+    <resultMap type="TzUserCollection" id="TzUserCollectionResult">
+        <result property="id"    column="id"    />
+        <result property="prodId"    column="prod_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectTzUserCollectionVo">
+        select id, prod_id, user_id, create_time from tz_user_collection
+    </sql>
+
+    <select id="selectTzUserCollectionList" parameterType="TzUserCollection" resultMap="TzUserCollectionResult">
+        <include refid="selectTzUserCollectionVo"/>
+        <where>  
+            <if test="prodId != null "> and prod_id = #{prodId}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzUserCollectionById" parameterType="Long" resultMap="TzUserCollectionResult">
+        <include refid="selectTzUserCollectionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTzUserCollection" parameterType="TzUserCollection" useGeneratedKeys="true" keyProperty="id">
+        insert into tz_user_collection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prodId != null">prod_id,</if>
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prodId != null">#{prodId},</if>
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzUserCollection" parameterType="TzUserCollection">
+        update tz_user_collection
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="prodId != null">prod_id = #{prodId},</if>
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTzUserCollectionById" parameterType="Long">
+        delete from tz_user_collection where id = #{id}
+    </delete>
+
+    <delete id="deleteTzUserCollectionByIds" parameterType="String">
+        delete from tz_user_collection where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

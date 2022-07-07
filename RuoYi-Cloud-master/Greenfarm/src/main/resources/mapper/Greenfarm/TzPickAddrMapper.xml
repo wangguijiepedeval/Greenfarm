@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.Greenfarm.mapper.TzPickAddrMapper">
+    
+    <resultMap type="TzPickAddr" id="TzPickAddrResult">
+        <result property="addrId"    column="addr_id"    />
+        <result property="addrName"    column="addr_name"    />
+        <result property="addr"    column="addr"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="provinceId"    column="province_id"    />
+        <result property="province"    column="province"    />
+        <result property="cityId"    column="city_id"    />
+        <result property="city"    column="city"    />
+        <result property="areaId"    column="area_id"    />
+        <result property="area"    column="area"    />
+        <result property="shopId"    column="shop_id"    />
+    </resultMap>
+
+    <sql id="selectTzPickAddrVo">
+        select addr_id, addr_name, addr, mobile, province_id, province, city_id, city, area_id, area, shop_id from tz_pick_addr
+    </sql>
+
+    <select id="selectTzPickAddrList" parameterType="TzPickAddr" resultMap="TzPickAddrResult">
+        <include refid="selectTzPickAddrVo"/>
+        <where>  
+            <if test="addrName != null  and addrName != ''"> and addr_name like concat('%', #{addrName}, '%')</if>
+            <if test="addr != null  and addr != ''"> and addr = #{addr}</if>
+            <if test="mobile != null  and mobile != ''"> and mobile = #{mobile}</if>
+            <if test="provinceId != null "> and province_id = #{provinceId}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="cityId != null "> and city_id = #{cityId}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="areaId != null "> and area_id = #{areaId}</if>
+            <if test="area != null  and area != ''"> and area = #{area}</if>
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTzPickAddrByAddrId" parameterType="Long" resultMap="TzPickAddrResult">
+        <include refid="selectTzPickAddrVo"/>
+        where addr_id = #{addrId}
+    </select>
+        
+    <insert id="insertTzPickAddr" parameterType="TzPickAddr" useGeneratedKeys="true" keyProperty="addrId">
+        insert into tz_pick_addr
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="addrName != null">addr_name,</if>
+            <if test="addr != null">addr,</if>
+            <if test="mobile != null">mobile,</if>
+            <if test="provinceId != null">province_id,</if>
+            <if test="province != null">province,</if>
+            <if test="cityId != null">city_id,</if>
+            <if test="city != null">city,</if>
+            <if test="areaId != null">area_id,</if>
+            <if test="area != null">area,</if>
+            <if test="shopId != null">shop_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="addrName != null">#{addrName},</if>
+            <if test="addr != null">#{addr},</if>
+            <if test="mobile != null">#{mobile},</if>
+            <if test="provinceId != null">#{provinceId},</if>
+            <if test="province != null">#{province},</if>
+            <if test="cityId != null">#{cityId},</if>
+            <if test="city != null">#{city},</if>
+            <if test="areaId != null">#{areaId},</if>
+            <if test="area != null">#{area},</if>
+            <if test="shopId != null">#{shopId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTzPickAddr" parameterType="TzPickAddr">
+        update tz_pick_addr
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="addrName != null">addr_name = #{addrName},</if>
+            <if test="addr != null">addr = #{addr},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="provinceId != null">province_id = #{provinceId},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="cityId != null">city_id = #{cityId},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="areaId != null">area_id = #{areaId},</if>
+            <if test="area != null">area = #{area},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
+        </trim>
+        where addr_id = #{addrId}
+    </update>
+
+    <delete id="deleteTzPickAddrByAddrId" parameterType="Long">
+        delete from tz_pick_addr where addr_id = #{addrId}
+    </delete>
+
+    <delete id="deleteTzPickAddrByAddrIds" parameterType="String">
+        delete from tz_pick_addr where addr_id in 
+        <foreach item="addrId" collection="array" open="(" separator="," close=")">
+            #{addrId}
+        </foreach>
+    </delete>
+</mapper>
