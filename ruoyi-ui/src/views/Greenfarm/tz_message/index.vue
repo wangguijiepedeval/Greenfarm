@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="姓名" prop="userName">
+      <el-form-item label="用户id" prop="id">
         <el-input
-          v-model="queryParams.userName"
-          placeholder="请输入姓名"
+          v-model="queryParams.id"
+          placeholder="请输入用户id"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -79,13 +79,19 @@
 
     <el-table v-loading="loading" :data="tz_messageList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="${comment}" align="center" prop="id" />
-      <el-table-column label="姓名" align="center" prop="userName" />
-      <el-table-column label="邮箱" align="center" prop="email" />
-      <el-table-column label="联系方式" align="center" prop="contact" />
-      <el-table-column label="留言内容" align="center" prop="content" />
-      <el-table-column label="留言回复" align="center" prop="reply" />
-      <el-table-column label="状态：0:未审核 1审核通过" align="center" prop="status" />
+      <el-table-column label="用户id" align="center" prop="id" :show-overflow-tooltip="true"/>
+      <el-table-column label="姓名" align="center" prop="userName" :show-overflow-tooltip="true"/>
+      <el-table-column label="邮箱" align="center" prop="email" :show-overflow-tooltip="true"/>
+      <el-table-column label="联系方式" align="center" prop="contact" :show-overflow-tooltip="true"/>
+      <el-table-column label="留言内容" align="center" prop="content" :show-overflow-tooltip="true"/>
+      <el-table-column label="留言回复" align="center" prop="reply" :show-overflow-tooltip="true"/>
+      <!-- <el-table-column label="状态" align="center" prop="status" /> -->
+       <el-table-column label="消息状态" align="center" prop="status" >
+      <template slot-scope="scope">
+          <dict-tag :options="dict.type.tz_message_status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
+      <!-- ：0:未审核 1审核通过 -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -132,6 +138,21 @@
         <el-form-item label="留言回复" prop="reply">
           <el-input v-model="form.reply" type="textarea" placeholder="请输入内容" />
         </el-form-item>
+        <el-form-item label="消息状态" prop="status">
+          <!-- <el-input v-model="form.status"  placeholder="请输入内容" /> -->
+          <el-tooltip :content="'Switch value: ' + form.status" placement="top">
+                <el-switch 
+                  v-model="form.status"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                  :active-value="1"
+                  :inactive-value="-1"
+                  active-text="通过"
+                  inactive-text="驳回">
+                </el-switch>
+              </el-tooltip>
+        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -146,6 +167,7 @@ import { listTz_message, getTz_message, delTz_message, addTz_message, updateTz_m
 
 export default {
   name: "Tz_message",
+   dicts: ['tz_message_status'], 
   data() {
     return {
       // 遮罩层
@@ -179,6 +201,7 @@ export default {
       },
       // 表单参数
       form: {},
+      value: "1",
       // 表单校验
       rules: {
       }
