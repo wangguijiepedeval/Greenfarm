@@ -211,36 +211,47 @@
 
     <el-table v-loading="loading" :data="tz_shop_detailList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="店铺id" align="center" prop="shopId" />
-      <el-table-column label="店铺名称" align="center" prop="shopName" />
-      <el-table-column label="店长id" align="center" prop="userId" />
-      <el-table-column label="店铺类型" align="center" prop="shopType" />
-      <el-table-column label="店铺简介" align="center" prop="intro" />
-      <el-table-column label="店铺公告" align="center" prop="shopNotice" />
-      <el-table-column label="店铺行业" align="center" prop="shopIndustry" />
-      <el-table-column label="店长姓名" align="center" prop="shopOwner" />
-      <el-table-column label="绑定手机" align="center" prop="mobile" />
-      <el-table-column label="联系电话" align="center" prop="tel" />
-      <el-table-column label="所在纬度" align="center" prop="shopLat" />
-      <el-table-column label="所在经度" align="center" prop="shopLng" />
-      <el-table-column label="详细地址" align="center" prop="shopAddress" />
-      <el-table-column label="所在省份" align="center" prop="province" />
-      <el-table-column label="所在城市" align="center" prop="city" />
-      <el-table-column label="所在区域" align="center" prop="area" />
+      <el-table-column label="店铺id" align="center" prop="shopId" :show-overflow-tooltip="true"/>
+      <el-table-column label="店铺名称" align="center" prop="shopName" :show-overflow-tooltip="true"/>
+      <!-- <el-table-column label="店长id" align="center" prop="userId" /> -->
+      <el-table-column label="店铺类型" align="center" prop="shopType" :show-overflow-tooltip="true"/>
+      <!-- <el-table-column label="店铺简介" align="center" prop="intro" /> -->
+      <!-- <el-table-column label="店铺公告" align="center" prop="shopNotice" /> -->
+      <el-table-column label="店铺行业" align="center" prop="shopIndustry" :show-overflow-tooltip="true"/>
+      <el-table-column label="店长姓名" align="center" prop="shopOwner" :show-overflow-tooltip="true"/>
+      <el-table-column label="绑定手机" align="center" prop="mobile" :show-overflow-tooltip="true"/>
+      <el-table-column label="联系电话" align="center" prop="tel" :show-overflow-tooltip="true"/>
+      <!-- <el-table-column label="所在纬度" align="center" prop="shopLat" /> -->
+      <!-- <el-table-column label="所在经度" align="center" prop="shopLng" /> -->
+      <el-table-column label="详细地址" align="center" prop="shopAddress" :show-overflow-tooltip="true"/>
+      <el-table-column label="所在省份" align="center" prop="province" :show-overflow-tooltip="true"/>
+      <!-- <el-table-column label="所在城市" align="center" prop="city" /> -->
+      <!-- <el-table-column label="所在区域" align="center" prop="area" />
       <el-table-column label="省市区码" align="center" prop="pcaCode" />
       <el-table-column label="店铺logo" align="center" prop="shopLogo" />
       <el-table-column label="店铺相册" align="center" prop="shopPhotos" />
-      <el-table-column label="营业时间" align="center" prop="openTime" />
-      <el-table-column label="店铺状态" align="center" prop="shopStatus" />
+      <el-table-column label="营业时间" align="center" prop="openTime" /> -->
+      <el-table-column label="审核状态" align="center" prop="shopStatus" >
+      <template slot-scope="scope">
+          <dict-tag :options="dict.type.tz_shop_status" :value="scope.row.shopStatus"/>
+        </template>
+      </el-table-column>
       <!-- (-1:未开通 0: 停业中 1:营业中)，可修改 -->
-      <el-table-column label="运费承担" align="center" prop="transportType" />
+      <!-- <el-table-column label="运费承担" align="center" prop="transportType" /> -->
       <!-- 0:商家承担运费; 1:买家承担运费 -->
-      <el-table-column label="固定运费" align="center" prop="fixedFreight" />
+      <!-- <el-table-column label="固定运费" align="center" prop="fixedFreight" />
       <el-table-column label="满X包邮" align="center" prop="fullFreeShipping" />
-      <el-table-column label="分销开关" align="center" prop="isDistribution" />
+      <el-table-column label="分销开关" align="center" prop="isDistribution" /> -->
       <!-- (0:开启 1:关闭) -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-view"
+            @click="handleView(scope.row,scope.index)"
+            v-hasPermi="['system:operlog:query']"
+          >查看</el-button>
           <el-button
             size="mini"
             type="text"
@@ -248,13 +259,13 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['Greenfarm:tz_shop_detail:edit']"
           >修改</el-button>
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['Greenfarm:tz_shop_detail:remove']"
-          >删除</el-button>
+          >删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -270,6 +281,10 @@
     <!-- 添加或修改商家管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="店铺id" prop="shopId">
+          <el-input v-model="form.shopId" placeholder="请输入店铺id" />
+        </el-form-item>
+
         <el-form-item label="店铺名称" prop="shopName">
           <el-input v-model="form.shopName" placeholder="请输入店铺名称" />
         </el-form-item>
@@ -324,8 +339,22 @@
         <el-form-item label="营业时间" prop="openTime">
           <el-input v-model="form.openTime" placeholder="请输入每天营业时间段(可修改)" />
         </el-form-item>
-        <el-form-item label="店铺状态" prop="shopStatus">
-          <el-input v-model="form.shopStatus" placeholder="请输入店铺状态" />
+        <el-form-item label="审核状态" prop="shopStatus">
+          <!-- <el-input v-model="form.shopStatus" placeholder="请输入审核状态" /> -->
+          <!-- <div v-if="form.status === 1">通过</div>
+              <div v-else-if="form.status === 0">失败</div> -->
+              <el-tooltip :content="'Switch value: ' + form.shopStatus" placement="top">
+                <el-switch 
+                  v-model="form.shopStatus"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                  :active-value="1"
+                  :inactive-value="-1"
+                  active-text="通过"
+                  inactive-text="驳回">
+                </el-switch>
+                 
+              </el-tooltip>
         </el-form-item>
         
         <el-form-item label="固定运费" prop="fixedFreight">
@@ -343,6 +372,9 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    
+    
+
   </div>
 </template>
 
@@ -351,6 +383,7 @@ import { listTz_shop_detail, getTz_shop_detail, delTz_shop_detail, addTz_shop_de
 
 export default {
   name: "Tz_shop_detail",
+  dicts: ['tz_shop_status'],
   data() {
     return {
       // 遮罩层
@@ -404,7 +437,8 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      value: "1"
     };
   },
   created() {
@@ -424,6 +458,11 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
+    },
+    /** 详细按钮操作 */
+    handleView(row) {
+      this.open = true;
+      this.form = row;
     },
     // 表单重置
     reset() {
@@ -510,6 +549,7 @@ export default {
         }
       });
     },
+    
     /** 删除按钮操作 */
     handleDelete(row) {
       const shopIds = row.shopId || this.ids;

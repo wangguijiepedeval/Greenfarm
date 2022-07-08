@@ -25,30 +25,47 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="现价" prop="price">
+      <!-- <el-form-item label="现价" prop="price">
         <el-input
           v-model="queryParams.price"
           placeholder="请输入现价"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="商品主图" prop="pic">
+      </el-form-item> -->
+      <!-- <el-form-item label="商品主图" prop="pic">
         <el-input
           v-model="queryParams.pic"
           placeholder="请输入商品主图"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="商品分类" prop="categoryId">
+      </el-form-item> -->
+      <!-- <el-form-item label="商品分类" prop="categoryId">
         <el-input
           v-model="queryParams.categoryId"
           placeholder="请输入商品分类"
           clearable
           @keyup.enter.native="handleQuery"
         />
+      </el-form-item> -->
+      <el-form-item label="商品分类" prop="categoryId">
+        <el-select
+          v-model="queryParams.categoryId"
+          placeholder="请选择商品分类"
+          clearable
+          @keyup.enter.native="handleQuery"
+          style="width: 240px"
+        >
+          <el-option
+            v-for="dict in dict.type.tz_prod_category"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
+      
       <el-form-item label="销量" prop="soldNum">
         <el-input
           v-model="queryParams.soldNum"
@@ -57,38 +74,38 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="总库存" prop="totalStocks">
+      <!-- <el-form-item label="总库存" prop="totalStocks">
         <el-input
           v-model="queryParams.totalStocks"
           placeholder="请输入总库存"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="运费模板id" prop="deliveryTemplateId">
+      </el-form-item> -->
+      <!-- <el-form-item label="运费模板id" prop="deliveryTemplateId">
         <el-input
           v-model="queryParams.deliveryTemplateId"
           placeholder="请输入运费模板id"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="上架时间" prop="putawayTime">
+      </el-form-item> -->
+      <!-- <el-form-item label="上架时间" prop="putawayTime">
         <el-date-picker clearable
           v-model="queryParams.putawayTime"
           type="date"
           value-format="yyyy-MM-dd"
           placeholder="请选择上架时间">
         </el-date-picker>
-      </el-form-item>
-      <el-form-item label="版本 乐观锁" prop="version">
+      </el-form-item> -->
+      <!-- <el-form-item label="版本 乐观锁" prop="version">
         <el-input
           v-model="queryParams.version"
           placeholder="请输入版本 乐观锁"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -143,29 +160,47 @@
 
     <el-table v-loading="loading" :data="tz_prodList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="产品ID" align="center" prop="prodId" />
-      <el-table-column label="商品名称" align="center" prop="prodName" />
-      <el-table-column label="店铺id" align="center" prop="shopId" />
-      <el-table-column label="原价" align="center" prop="oriPrice" />
-      <el-table-column label="现价" align="center" prop="price" />
-      <el-table-column label="简要描述,卖点等" align="center" prop="brief" />
+      <el-table-column label="产品ID" align="center" prop="prodId" :show-overflow-tooltip="true"/>
+      <el-table-column label="商品名称" align="center" prop="prodName" min-width="200" :show-overflow-tooltip="true"/>
+      <el-table-column label="店铺id" align="center" prop="shopId" :show-overflow-tooltip="true"/>
+      <el-table-column label="原价" align="center" prop="oriPrice" :show-overflow-tooltip="true"/>
+      <el-table-column label="现价" align="center" prop="price" :show-overflow-tooltip="true"/>
+      <!-- <el-table-column label="简要描述,卖点等" align="center" prop="brief" />
       <el-table-column label="详细描述" align="center" prop="content" />
       <el-table-column label="商品主图" align="center" prop="pic" />
-      <el-table-column label="商品图片，以,分割" align="center" prop="imgs" />
-      <el-table-column label="默认是1，表示正常状态, -1表示删除, 0下架" align="center" prop="status" />
-      <el-table-column label="商品分类" align="center" prop="categoryId" />
-      <el-table-column label="销量" align="center" prop="soldNum" />
-      <el-table-column label="总库存" align="center" prop="totalStocks" />
-      <el-table-column label="配送方式json见TransportModeVO" align="center" prop="deliveryMode" />
-      <el-table-column label="运费模板id" align="center" prop="deliveryTemplateId" />
-      <el-table-column label="上架时间" align="center" prop="putawayTime" width="180">
+      <el-table-column label="商品图片，以,分割" align="center" prop="imgs" /> -->
+      <el-table-column label="商品状态" align="center" prop="status" >
+      <template slot-scope="scope">
+          <dict-tag :options="dict.type.tz_prod_status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
+      <!-- 默认是1，表示正常状态, -1表示删除, 0下架 -->
+      <!-- <el-table-column label="商品分类" align="center" prop="categoryId" /> -->
+      <el-table-column label="商品分类" align="center" prop="categoryId">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.tz_prod_category" :value="scope.row.categoryId"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="销量" align="center" prop="soldNum" :show-overflow-tooltip="true"/>
+      <el-table-column label="总库存" align="center" prop="totalStocks" :show-overflow-tooltip="true"/>
+      <!-- <el-table-column label="配送方式json见TransportModeVO" align="center" prop="deliveryMode" />
+      <el-table-column label="运费模板id" align="center" prop="deliveryTemplateId" /> -->
+      <el-table-column label="上架时间" align="center" prop="putawayTime" width="140">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.putawayTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="版本 乐观锁" align="center" prop="version" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <!-- <el-table-column label="版本 乐观锁" align="center" prop="version" /> -->
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="100">
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-view"
+            @click="handleView(scope.row,scope.index)"
+            v-hasPermi="['Greenfarm:tz_prod:query']"
+          >查看</el-button>
+          
           <el-button
             size="mini"
             type="text"
@@ -173,13 +208,13 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['Greenfarm:tz_prod:edit']"
           >修改</el-button>
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['Greenfarm:tz_prod:remove']"
-          >删除</el-button>
+          >删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -193,7 +228,7 @@
     />
 
     <!-- 添加或修改商品对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="商品名称" prop="prodName">
           <el-input v-model="form.prodName" placeholder="请输入商品名称" />
@@ -207,7 +242,7 @@
         <el-form-item label="现价" prop="price">
           <el-input v-model="form.price" placeholder="请输入现价" />
         </el-form-item>
-        <el-form-item label="简要描述,卖点等" prop="brief">
+        <el-form-item label="简要描述" prop="brief">
           <el-input v-model="form.brief" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="详细描述">
@@ -216,12 +251,43 @@
         <el-form-item label="商品主图" prop="pic">
           <el-input v-model="form.pic" placeholder="请输入商品主图" />
         </el-form-item>
-        <el-form-item label="商品图片，以,分割" prop="imgs">
+        <el-form-item label="商品图片" prop="imgs">
           <el-input v-model="form.imgs" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="商品分类" prop="categoryId">
-          <el-input v-model="form.categoryId" placeholder="请输入商品分类" />
+        <el-form-item label="商品状态" prop="status">
+          <!-- <el-input v-model="form.status"  placeholder="请输入内容" /> -->
+          <el-tooltip :content="'Switch value: ' + form.status" placement="top">
+                <el-switch 
+                  v-model="form.status"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                  :active-value="1"
+                  :inactive-value="-1"
+                  active-text="通过"
+                  inactive-text="驳回">
+                </el-switch>
+                 
+              </el-tooltip>
         </el-form-item>
+        <!-- <el-form-item label="商品分类" prop="categoryId">
+          <el-input v-model="form.categoryId" placeholder="请输入商品分类" />
+        </el-form-item> -->
+        <el-form-item label="商品分类" prop="categoryId">
+        <el-select
+          v-model="form.categoryId"
+          placeholder="请选择商品分类"
+          clearable
+          style="width: 240px"
+        >
+          <el-option
+            v-for="dict in dict.type.tz_prod_category"
+            :key="dict.value"
+            :label="dict.label"
+            :value="parseInt(dict.value)"
+          />
+        </el-select>
+         </el-form-item>
+         
         <el-form-item label="销量" prop="soldNum">
           <el-input v-model="form.soldNum" placeholder="请输入销量" />
         </el-form-item>
@@ -239,8 +305,8 @@
             placeholder="请选择上架时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="版本 乐观锁" prop="version">
-          <el-input v-model="form.version" placeholder="请输入版本 乐观锁" />
+        <el-form-item label="版本乐观锁" prop="version">
+          <el-input v-model="form.version" placeholder="请输入版本乐观锁" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -256,6 +322,7 @@ import { listTz_prod, getTz_prod, delTz_prod, addTz_prod, updateTz_prod } from "
 
 export default {
   name: "Tz_prod",
+  dicts: ['tz_prod_category','tz_prod_status'],
   data() {
     return {
       // 遮罩层
@@ -304,7 +371,8 @@ export default {
         prodName: [
           { required: true, message: "商品名称不能为空", trigger: "blur" }
         ],
-      }
+      },
+      value: "1"
     };
   },
   created() {
@@ -324,6 +392,11 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
+    },
+    /** 详细按钮操作 */
+    handleView(row) {
+      this.open = true;
+      this.form = row;
     },
     // 表单重置
     reset() {
